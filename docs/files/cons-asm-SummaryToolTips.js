@@ -1,0 +1,1 @@
+NDSummary.OnToolTipsLoaded("File:cons.asm",{2:"<div class=\"NDToolTip TModule LAssembly\"><div class=\"TTSummary\">Console Input and Output</div></div>",4:"<div class=\"NDToolTip TFunction LAssembly\"><div class=\"TTSummary\">Prints a null-terminated 7-bit ASCII string.</div></div>"});

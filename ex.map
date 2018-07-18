@@ -1,0 +1,81 @@
+Open Watcom Linker Version 2.0 beta Jul  3 2018 23:41:23 (64-bit)
+Copyright (c) 2002-2018 The Open Watcom Contributors. All Rights Reserved.
+Portions Copyright (c) 1985-2002 Sybase, Inc. All Rights Reserved.
+Created on:       18/07/18 15:30:59
+Warning! W1032: file ex.obj(EX), record 21: record (type 0x0070) not processed
+Executable Image: ex.exe
+creating a DOS executable
+
+
+                        +------------+
+                        |   Groups   |
+                        +------------+
+
+Group                           Address              Size
+=====                           =======              ====
+
+CGROUP                          0000:0000            00000032
+DGROUP                          0003:0002            0000100a
+
+
+
+                        +--------------+
+                        |   Segments   |
+                        +--------------+
+
+Segment                Class          Group          Address         Size
+=======                =====          =====          =======         ====
+
+CODE                   CODE           CGROUP         0000:0000       00000032
+DATA                   DATA           DGROUP         0003:0002       00000000
+CONST                  CONST          DGROUP         0003:0002       00000009
+STACK                  STACK          DGROUP         0003:000c       00001000
+MEMORY                 MEMORY         DGROUP         0103:000c       00000000
+
+
+                        +----------------+
+                        |   Memory Map   |
+                        +----------------+
+
+* = unreferenced symbol
++ = symbol only referenced locally
+
+Address        Symbol
+=======        ======
+
+Module: sys.obj(sys.asm)
+0000:000d      entry
+0000:0016      TERM
+Module: cons.obj(cons.asm)
+0000:001c      CONS_PRSTR
+
+
+                        +---------------------+
+                        |   Module Segments   |
+                        +---------------------+
+
+! = 32-bit segment
+c = initialized communal data
+
+Module          Segment               Class           Address         Size
+======          =======               =====           =======         ====
+
+EX              CODE                  CODE           0000:0000        0000000d
+                DATA                  DATA           0003:0002        00000000
+                CONST                 CONST          0003:0002        00000009
+                STACK                 STACK          0003:000c        00000004
+                MEMORY                MEMORY         0103:000c        00000000
+sys.asm         DATA                  DATA           0003:0002        00000000
+                CODE                  CODE           0000:000d        0000000f
+cons.asm        DATA                  DATA           0003:0002        00000000
+                CODE                  CODE           0000:001c        00000016
+
+
+                        +-----------------------+
+                        |   Linker Statistics   |
+                        +-----------------------+
+
+Stack size:  1000 (4096.)
+Memory size:  103c (4156.)
+Entry point address: 0000:000d
+Link time: 00:00.03

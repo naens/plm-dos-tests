@@ -1,0 +1,14 @@
+ex:
+do;
+
+    cons_prstr: procedure (pstr) external;
+        declare pstr address;
+    end;
+
+    term: procedure external;
+    end;
+
+    call cons_prstr(.('HELLO!', 13, 10, 0));
+    call term;
+
+end ex;

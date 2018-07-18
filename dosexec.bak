@@ -1,0 +1,21 @@
+#!/bin/zsh
+
+lredirstr="lredir d:                    linux\\FS\\$(pwd)"
+ll=$(echo $(echo $lredirstr))
+llen=${#ll}
+
+remove_head() {
+    local found=false
+    cnt=0
+    while IFS=$'\r\n' read -r line; do
+        if [[ "$line[1,4]" = "D:\>" ]]; then
+            cnt=$((cnt+1))
+        elif [[ $cnt -eq 1 ]]; then
+             echo "$line"
+        fi
+    done
+}
+
+command="$@"
+echo -e "$lredirstr\rd:\r$@\rexitemu\r" \
+        | dosemu -dumb 2> /dev/null | remove_head

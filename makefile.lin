@@ -1,0 +1,23 @@
+all: ex Makefile
+
+ex: ex.plm ex.lnk sys.obj cons.obj makefile.lin
+	./dosexec plm86 ex.plm code small xref symbols
+	@wlink @ex.lnk
+	@echo "#!/bin/sh" > ex
+	@echo './dosexec ex.exe' >> ex
+	@chmod +x ex
+
+%.obj: %.asm dos.def
+	$(eval $@_NAME := $(basename $<))
+	nasm -f obj $($@_NAME).asm -l $($@_NAME).lst
+
+run-ex: ex
+	./dosexec ex.exe
+
+.PHONY: clean
+clean:
+	rm -f *.map *.lst *.obj ex ex.exe
+
+.PHONY: doc
+doc:
+	naturaldocs -i . -p nd-project -o HTML docs

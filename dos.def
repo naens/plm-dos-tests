@@ -1,0 +1,2 @@
+conout		equ	02h
+dos		equ	21h

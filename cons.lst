@@ -1,0 +1,44 @@
+     1                                  global cons_prstr
+     2                                  
+     3                                  ; Module: cons
+     4                                  ;
+     5                                  ;     Console Input and Output
+     6                                  ;
+     7                                  ; Dependencies: dos.def
+     8                                  ;
+     9                                  
+    10                                  %include "dos.def"
+     1                              <1> conout		equ	02h
+     2                              <1> dos		equ	21h
+    11                                  
+    12                                  ; Function: cons_prstr
+    13                                  ;
+    14                                  ;     Prints a null-terminated 7-bit ASCII string.
+    15                                  ;
+    16                                  ; Parameters:
+    17                                  ;
+    18                                  ;     $1 - address of the first character of the string
+    19                                  ;
+    20                                          segment data class=data
+    21                                  ;tmp     resw 1
+    22                                  
+    23                                          segment code class=code
+    24                                  
+    25                                  cons_prstr:
+    26 00000000 55                              push    bp
+    27 00000001 89E5                            mov     bp, sp
+    28 00000003 56                              push    si
+    29 00000004 8B7604                          mov     si, [bp+4]
+    30                                  .lp:
+    31 00000007 AC                              lodsb
+    32 00000008 3C00                            cmp     al, 0
+    33 0000000A 7407                            je      .e
+    34 0000000C 92                              xchg    ax, dx
+    35 0000000D B402                            mov     ah, conout
+    36 0000000F CD21                            int     dos
+    37 00000011 EBF4                            jmp     .lp
+    38                                  .e:
+    39 00000013 5E                              pop     si
+    40 00000014 5D                              pop     bp
+    41 00000015 C3                              ret
+    42                                  

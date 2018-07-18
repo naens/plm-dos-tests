@@ -1,0 +1,67 @@
+PL/M-86 COMPILER    EX                                                                       07/18/;8 15:30:50  PAGE   1
+
+
+DOS 5.0 (038-N) PL/M-86 V3.1  COMPILATION OF MODULE EX
+OBJECT MODULE PLACED IN EX.obj
+COMPILER INVOKED BY:  C:\PLM86.EXE EX.PLM CODE SMALL XREF SYMBOLS
+
+
+
+   1          ex:
+              do;
+
+   2   1          cons_prstr: procedure (pstr) external;
+   3   2              declare pstr address;
+   4   2          end;
+
+   5   1          term: procedure external;
+   6   2          end;
+
+   7   1          call cons_prstr(.('HELLO!', 13, 10, 0));
+   8   1          call term;
+
+   9   1      end ex;
+PL/M-86 COMPILER    EX                                                                       07/18/;8 15:30:50  PAGE   2
+                    ASSEMBLY LISTING OF OBJECT CODE
+
+
+                                                 ; STATEMENT # 7
+           0000  8BEC            MOV     BP,SP
+           0002  FB              STI
+           0003  B80000          MOV     AX,OFFSET(@@LONG$CONSTANT$0000H)
+           0006  50              PUSH    AX      ; 1
+           0007  E80000          CALL    CONS_PRSTR
+                                                 ; STATEMENT # 8
+           000A  E80000          CALL    TERM
+                                                 ; STATEMENT # 9
+PL/M-86 COMPILER    EX                                                                       07/18/;8 15:30:50  PAGE   3
+                    CROSS-REFERENCE LISTING
+
+
+DEFN  ADDR   SIZE  NAME, ATTRIBUTES, AND REFERENCES
+---- ------ -----  --------------------------------
+
+   2  0000H        CONS_PRSTR . . . .  PROCEDURE EXTERNAL(0) STACK=0000H    7
+   1  0000H    13  EX . . . . . . . .  MODULE STACK=0004H
+   2  0000H     2  PSTR . . . . . . .  OFFSET IN PROC(CONS_PRSTR) PARAMETER    3
+   5  0000H        TERM . . . . . . .  PROCEDURE EXTERNAL(1) STACK=0000H    8
+
+
+
+MODULE INFORMATION:
+
+     CODE AREA SIZE     = 000DH     13D
+     CONSTANT AREA SIZE = 0009H      9D
+     VARIABLE AREA SIZE = 0000H      0D
+     MAXIMUM STACK SIZE = 0004H      4D
+     14 LINES READ
+     0 PROGRAM WARNINGS
+     0 PROGRAM ERRORS
+
+DICTIONARY SUMMARY:
+
+     490KB MEMORY AVAILABLE
+     4KB MEMORY USED   (0%)
+     0KB DISK SPACE USED
+
+END OF PL/M-86 COMPILATION

@@ -1,0 +1,6 @@
+option map
+option symfile
+option verbose
+option nocaseexact
+option start=entry
+name ex.exe

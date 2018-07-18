@@ -1,0 +1,19 @@
+#!/bin/sh
+
+command="$@"
+tmpfile='tmp.$$$'
+SDL_AUDIODRIVER=dummy dosbox \
+		-c "mount c $(pwd)" \
+		-c "c:" \
+		-c "$command" \
+		-c "pause" \
+		-c "exit"
+
+for f in *
+do
+    fn=$(echo "$f" | tr [:upper:] [:lower:])
+    if [ ! "$f" = "$fn" -a ! "$f" = "Makefile" ]
+    then
+        mv "$f" "$fn"
+    fi
+done
