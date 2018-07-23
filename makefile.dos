@@ -1,8 +1,0 @@
-ex.exe: lib.asm ex.plm ex.lnk Makefile
-	nasm -f obj sys.asm -l sys.lst
-	nasm -f obj cons.asm -l cons.lst
-	plm86 ex.plm code small xref symbols
-	wlink @ex.lnk
-
-clean: .SYMBOLIC
-	rm -f *.map *.lst *.obj ex.exe

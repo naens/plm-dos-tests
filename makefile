@@ -1,7 +1,7 @@
 .extensions:
 .extensions: .obj .asm
 
-ex.exe: ex.plm wcl.lnk sys.obj cons.obj makefile.lin
+ex.exe: ex.plm wcl.lnk sys.obj cons.obj makefile
 !ifdef __UNIX__
 	./dosexec plm86 ex.plm code small xref symbols
 !else ifdef __MSDOS__
@@ -20,5 +20,5 @@ run-ex: ex.exe .SYMBOLIC
 clean: .SYMBOLIC
 	rm -f *.map *.lst *.obj ex ex.exe
 
-doc: .SYMBOLIC
+docs: .SYMBOLIC
 	naturaldocs -i . -p nd-project -o HTML docs
