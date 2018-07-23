@@ -18,7 +18,7 @@ run-ex: ex.exe .SYMBOLIC
 	nasm -f obj $< -o $@ -l $^&.lst
 
 clean: .SYMBOLIC
-	rm -f *.map *.lst *.obj ex ex.exe
+	rm -f *.map *.lst *.obj *.err *.sym ex ex.exe
 
 docs: .SYMBOLIC
 	naturaldocs -i . -p nd-project -o HTML docs

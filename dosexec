@@ -6,7 +6,7 @@ SDL_VIDEODRIVER=dummy SDL_AUDIODRIVER=dummy \
 	dosbox	-c "mount c $(pwd)" \
 		-c "c:" \
 		-c "$command > tmp.\$\$\$" \
-		-c "exit" > log.txt
+		-c "exit" > /dev/null
 
 for f in *
 do

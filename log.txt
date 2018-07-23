@@ -1,7 +1,0 @@
-DOSBox version 0.74
-Copyright 2002-2010 DOSBox Team, published under GNU GPL.
----
-CONFIG:Loading primary settings from config file /home/andrei/.dosbox/dosbox-0.74.conf
-ALSA:Can't subscribe to MIDI port (65:0) nor (17:0)
-MIDI:Opened device:none
-SHELL:Redirect output to tmp.$$$
