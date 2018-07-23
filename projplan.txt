@@ -1,0 +1,59 @@
+Plan for the Project
+====================
+* Exercises
+    -> hw: hello world
+       [i/o] writestring, writechar
+       Displays the "Hello, World!" string.
+    -> mincalc: minimalistic calculator
+       [i/o] readline, readnumber, writenumber
+       [lib] dec_to_hex, hex_to_dec
+       Asks base (10 or 16), operation and operands, writes the result.
+    -> dump: file dump
+       [i/o] openfile, readfile, readchar
+       [lib] cli-args
+       Prints the contents of a file in hexadecimal.
+    -> stcalc: stack calculator
+       [i/o] readline
+       [lib] hashtable
+       Prompts for numbers, operations, variable definitions, outputs
+       result.
+    -> wfreq: word frequency
+       [i/o] makefile, writefile, renamefile
+       [lib] hashtable, sort
+       Writes the frequency of each word of a file in another file, ordered
+       by frequency or alphabetically.  Uses a generic sort procedure that
+       accepts procedure pointers.
+    -> strpl: subst/insert file in another file
+
+
+* PL/M Compiler
+
+** Plan
+  1. Tokenizer
+      -> Read a PL/M file (output: pl/m structures)
+
+  2. Parser
+      -> Generate AST (output: pl/m structures)
+
+  3. Code Generator
+     -> Generate target code
+        (a) 8086 code
+            -> similar to plm86 list files, but for nasm (w/o optimizations!)
+        (b) x86-64 code
+            -> similar to cs:app, but for nasm and sysv calling convention
+
+** Structure
+   -> Project divided into compilation units (.obj files).
+   -> Parts can contain multiple compilation units if too big, and tested
+      separately, example: the Parser can contain an /expression/, a
+      /procedure/ and a /block/ modules.
+   -> Public procedures should be tested: the tokenizer and the parser can
+      generate json files and be tested by comparing output to expected
+      results.
+   -> Modules (compilation units) and public procedures should be documented
+      (using Natural Docs).
+   -> I/O modules are written in assembly, other libraries are written in
+      PL/M.  Documentation is written for all modules, tests are written
+      only for PL/M modules.
+   -> Test modules are written for PL/M modules, with an entry point that
+      calls the tests.  There is one test module per PL/M module.
