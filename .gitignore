@@ -5,3 +5,5 @@
 *.bak
 *.err
 *.sym
+*.exe
+*.lib
