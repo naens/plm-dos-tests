@@ -1,1 +1,0 @@
-NDFramePage.OnPageTitleLoaded("File:cons.asm","cons.asm");NDSummary.OnSummaryLoaded("File:cons.asm",[["Assembly","Assembly"]],[["Functions","Function"],["Groups","Group"],["Modules","Module"]],[[1,0,1,"Modules","Modules"],[2,0,2,"cons","cons"],[3,0,1,"Functions","Functions"],[4,0,0,"cons_prstr","cons_prstr"]]);

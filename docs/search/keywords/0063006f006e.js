@@ -1,1 +1,0 @@
-NDSearch.OnPrefixDataLoaded("con",["Module","Function"],[["cons",,[[,,,,0,"File:cons.asm:cons"]]],["cons_prstr",,[[,,,,1,"File:cons.asm:cons_prstr"]]]]);

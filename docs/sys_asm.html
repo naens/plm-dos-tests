@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html  xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Style-Type" content="text/css" />
+<meta http-equiv="Content-type" content="text/html; charset=ISO-8859-1" />
+<link rel="stylesheet" href="./robodoc.css" type="text/css" />
+<title>./sys.asm</title>
+<!-- Source: ./sys.asm -->
+<!-- Generated with ROBODoc Version 4.99.43 (Aug 19 2018) -->
+</head>
+<body>
+<div id="logo">
+<a name="robo_top_of_doc"></a>
+</div> <!-- logo -->
+<div id="navigation">
+<a class="menuitem" href="./toc_index.html#top">Table of Contents</a>
+<a class="menuitem" href="./robo_sourcefiles.html#top">Sourcefiles</a>
+<a class="menuitem" href="./masterindex.html#top">Index</a>
+<a class="menuitem" href="./robo_functions.html#top">Functions</a>
+<a class="menuitem" href="./robo_modules.html#top">Modules</a>
+<a class="menuitem" href="./robo_program.html#top">Program</a>
+</div> <!-- navigation -->
+<div id="content">
+<h3>TABLE OF CONTENTS</h3>
+<ul>
+<li>1. <a href="#robo1">plm-exercises/sys</a></li>
+<ul>
+<li>1.1. <a href="#robo4">sys/entry</a></li>
+<li>1.2. <a href="#robo5">sys/term</a></li>
+</ul>
+</ul>
+<hr />
+<a name="plm2dexercises2fsys"></a>
+<a name="robo1"></a><h2>plm-exercises/sys [ Modules ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./robo_modules.html#robo_top_of_doc">Modules</a> ]</p>
+<p class="item_name">NAME</p>
+<pre>    <strong>sys</strong> -- System library
+</pre>
+<p class="item_name">DESCRIPTION</p>
+<pre>    Module that contains system-related functions.
+</pre>
+<p class="item_name">USES</p>
+<pre>    dos.def
+</pre>
+
+<hr />
+<a name="sys2fentry"></a>
+<a name="robo4"></a><h2>sys/entry [ Functions ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo1">sys</a> ] [ <a href="./robo_functions.html#robo_top_of_doc">Functions</a> ]</p>
+<p class="item_name">NAME</p>
+<pre>    <strong>entry</strong>
+</pre>
+<p class="item_name">DESCRIPTION</p>
+<pre>    Initialize the system, must be called on program start.  The <strong>entry</strong>
+    function is the starting point, called before the program.  After
+    initialization it jumps to the real beginning of the program at
+    cs:0000h.
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre>    No parameters.
+</pre>
+<p class="item_name">RETURN VALUE</p>
+<pre>    doesn't return anything
+</pre>
+
+<hr />
+<a name="sys2fterm"></a>
+<a name="robo5"></a><h2>sys/term [ Functions ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo1">sys</a> ] [ <a href="./robo_functions.html#robo_top_of_doc">Functions</a> ]</p>
+<p class="item_name">NAME</p>
+<pre>    <strong>term</strong> -- Terminate the program
+</pre>
+<p class="item_name">DESCRIPTION</p>
+<pre>    Terminate the program.
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre>    No parameters.
+</pre>
+<p class="item_name">RETURN VALUE</p>
+<pre>    Doesn't return anything.
+</pre>
+
+</div> <!-- content -->
+<div id="footer">
+<p>Generated from ./sys.asm with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Aug 19 2018 18:34:28
+</p>
+</div> <!-- footer -->
+</body>
+</html>
