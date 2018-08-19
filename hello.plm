@@ -1,0 +1,23 @@
+/****p* plm-exercises/hello
+ *  NAME
+ *    hello -- Print 'HELLO!' and exit
+ *  DESCRIPTION
+ *    Print 'HELLO!' and exit.
+ *  USES
+ *    cons and sys modules
+ ****
+ */
+ex:
+do;
+
+    prstr: procedure (pstr) external;
+        declare pstr address;
+    end prstr;
+
+    term: procedure external;
+    end;
+
+    call prstr(.('HELLO!', 13, 10, 0));
+    call term;
+
+end ex;
