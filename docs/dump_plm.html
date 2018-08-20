@@ -6,8 +6,8 @@
 <meta http-equiv="Content-Style-Type" content="text/css" />
 <meta http-equiv="Content-type" content="text/html; charset=ISO-8859-1" />
 <link rel="stylesheet" href="./robodoc.css" type="text/css" />
-<title>./cons.asm</title>
-<!-- Source: ./cons.asm -->
+<title>./dump.plm</title>
+<!-- Source: ./dump.plm -->
 <!-- Generated with ROBODoc Version 4.99.43 (Aug 19 2018) -->
 </head>
 <body>
@@ -25,47 +25,36 @@
 <div id="content">
 <h3>TABLE OF CONTENTS</h3>
 <ul>
-<li>1. <a href="#robo0">plm-exercises/cons</a></li>
-<ul>
-<li>1.1. <a href="#robo2">cons/prstr</a></li>
-</ul>
+<li>1. <a href="#robo3">plm-exercises/dump</a></li>
 </ul>
 <hr />
-<a name="plm2dexercises2fcons"></a>
-<a name="robo0"></a><h2>plm-exercises/cons [ Modules ]</h2>
+<a name="plm2dexercises2fdump"></a>
+<a name="robo3"></a><h2>plm-exercises/dump [ Program ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./robo_modules.html#robo_top_of_doc">Modules</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./robo_program.html#robo_top_of_doc">Program</a> ]</p>
 <p class="item_name">NAME</p>
-<pre>    <strong>cons</strong> -- Console Input and Output
+<pre>    <strong>dump</strong> -- print file in hexadecimal and ascii
 </pre>
 <p class="item_name">DESCRIPTION</p>
-<pre>    Module for Console Input and Output.
+<pre>    Prints a file, the name of which is given as command line argument, on
+    the console.  Each line corresponds to 16 bytes, the first column
+    contain the offset of the first byte of the line from the beginning of
+    the file, the second column contains the hexadecimal values of each
+    byte and the third column contains the the ASCII representation of
+    printable characters.
+ 
+    One screen is printed at a time if the file is large.  The user can
+    navigate using ^S for previous, ^X, space or enter for next.  By typing
+    'g', the user can enter the address to which to jump (the addresses are
+    absolute offsets from the beginning of the file.
 </pre>
 <p class="item_name">USES</p>
-<pre>    dos.def
-</pre>
-
-<hr />
-<a name="cons2fprstr"></a>
-<a name="robo2"></a><h2>cons/prstr [ Functions ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo0">cons</a> ] [ <a href="./robo_functions.html#robo_top_of_doc">Functions</a> ]</p>
-<p class="item_name">NAME</p>
-<pre>    <strong>prstr</strong> -- Prints a null-terminated 7-bit ASCII string.
-</pre>
-<p class="item_name">DESCRIPTION</p>
-<pre>    Print the string on the console.
-</pre>
-<p class="item_name">PARAMETERS</p>
-<pre>     $1 - address of the first character of the string
-</pre>
-<p class="item_name">RETURN VALUE</p>
-<pre>     Doesn't return anything
+<pre>    <a href="./cons_asm.html#robo0">cons</a> and <a href="./sys_asm.html#robo1">sys</a> modules
 </pre>
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./cons.asm with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Mon Aug 20 2018 18:38:07
+<p>Generated from ./dump.plm with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Mon Aug 20 2018 18:38:07
 </p>
 </div> <!-- footer -->
 </body>
