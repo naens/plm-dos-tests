@@ -1,0 +1,18 @@
+.\" Source: ./cons.asm
+.\" Generated with ROBODoc Version 4\.99\.43 (Aug 19 2018)
+.\" ROBODoc (c) 1994\-2015 by Frans Slothouber and many others\.
+.TH readln 3 "Aug 20, 2018" cons "cons Reference"
+
+.SH NAME
+\fBreadln\fR \-\- Read one line from standard input
+
+.SH DESCRIPTION
+Reads one line from the standard input and stores at the address
+indicated by the first parameter\.  The string is null\-terminated\.
+
+.SH PARAMETERS
+pstr \- address of the destination where to write the string\.
+len \- maximum length of the string to read (last null byte included\.
+
+.SH RETURN VALUE
+Doesn't return a value\.

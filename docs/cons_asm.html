@@ -27,7 +27,12 @@
 <ul>
 <li>1. <a href="#robo0">plm-exercises/cons</a></li>
 <ul>
-<li>1.1. <a href="#robo2">cons/prstr</a></li>
+<li>1.1. <a href="#robo2">cons/prchr</a></li>
+<li>1.2. <a href="#robo3">cons/prhexbyte</a></li>
+<li>1.3. <a href="#robo4">cons/prhexword</a></li>
+<li>1.4. <a href="#robo5">cons/prstr</a></li>
+<li>1.5. <a href="#robo6">cons/readkey</a></li>
+<li>1.6. <a href="#robo7">cons/readln</a></li>
 </ul>
 </ul>
 <hr />
@@ -46,8 +51,64 @@
 </pre>
 
 <hr />
+<a name="cons2fprchr"></a>
+<a name="robo2"></a><h2>cons/prchr [ Functions ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo0">cons</a> ] [ <a href="./robo_functions.html#robo_top_of_doc">Functions</a> ]</p>
+<p class="item_name">NAME</p>
+<pre>    <strong>prchr</strong> -- print single ASCII character
+</pre>
+<p class="item_name">DESCRIPTION</p>
+<pre>    Prints a single character givan as argument of type byte.
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre>    chr - character to print
+</pre>
+<p class="item_name">RETURN VALUE</p>
+<pre>    Doesn't return anything.
+</pre>
+
+<hr />
+<a name="cons2fprhexbyte"></a>
+<a name="robo3"></a><h2>cons/prhexbyte [ Functions ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo0">cons</a> ] [ <a href="./robo_functions.html#robo_top_of_doc">Functions</a> ]</p>
+<p class="item_name">NAME</p>
+<pre>    <strong>prhexbyte</strong> -- print a byte in hexadecimal form
+</pre>
+<p class="item_name">DESCRIPTION</p>
+<pre>    Prints a byte in hexadecimal lowercase form.
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre>    b - byte to print
+</pre>
+<p class="item_name">RETURN VALUE</p>
+<pre>    Doesn't return anything.
+</pre>
+
+<hr />
+<a name="cons2fprhexword"></a>
+<a name="robo4"></a><h2>cons/prhexword [ Functions ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo0">cons</a> ] [ <a href="./robo_functions.html#robo_top_of_doc">Functions</a> ]</p>
+<p class="item_name">NAME</p>
+<pre>    <strong>prhexword</strong> -- print a word (16-bits) in hexadecimal form
+</pre>
+<p class="item_name">DESCRIPTION</p>
+<pre>    Prints a word in hexadecimal lowercase form, without spaces, using 4
+    characters, zeros are added if needed so that the total of printed
+    characters be always four.
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre>    w - word to print
+</pre>
+<p class="item_name">RETURN VALUE</p>
+<pre>    Doesn't return anything.
+</pre>
+
+<hr />
 <a name="cons2fprstr"></a>
-<a name="robo2"></a><h2>cons/prstr [ Functions ]</h2>
+<a name="robo5"></a><h2>cons/prstr [ Functions ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo0">cons</a> ] [ <a href="./robo_functions.html#robo_top_of_doc">Functions</a> ]</p>
 <p class="item_name">NAME</p>
@@ -57,15 +118,54 @@
 <pre>    Print the string on the console.
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre>     $1 - address of the first character of the string
+<pre>     pstr - address of the first character of the string
 </pre>
 <p class="item_name">RETURN VALUE</p>
-<pre>     Doesn't return anything
+<pre>     Doesn't return anything.
+</pre>
+
+<hr />
+<a name="cons2freadkey"></a>
+<a name="robo6"></a><h2>cons/readkey [ Functions ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo0">cons</a> ] [ <a href="./robo_functions.html#robo_top_of_doc">Functions</a> ]</p>
+<p class="item_name">NAME</p>
+<pre>    <strong>readkey</strong> -- Read a single keypress (modifiers not included)
+  DESCRPTION
+    Reads a single key and stores it at the address pointed by the pkey
+    parameter.
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre>    pkey - address of the word value which has to be filled with data from
+           the key press
+</pre>
+<p class="item_name">RETURN VALUE</p>
+<pre>    Doesn't return a value.
+</pre>
+
+<hr />
+<a name="cons2freadln"></a>
+<a name="robo7"></a><h2>cons/readln [ Functions ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo0">cons</a> ] [ <a href="./robo_functions.html#robo_top_of_doc">Functions</a> ]</p>
+<p class="item_name">NAME</p>
+<pre>    <strong>readln</strong> -- Read one line from standard input
+</pre>
+<p class="item_name">DESCRIPTION</p>
+<pre>    Reads one line from the standard input and stores at the address
+    indicated by the first parameter.  The string is null-terminated.
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre>    pstr - address of the destination where to write the string.
+    len - maximum length of the string to read (last null byte included.
+</pre>
+<p class="item_name">RETURN VALUE</p>
+<pre>    Doesn't return a value.
 </pre>
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./cons.asm with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Mon Aug 20 2018 18:38:07
+<p>Generated from ./cons.asm with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Mon Aug 20 2018 21:08:32
 </p>
 </div> <!-- footer -->
 </body>

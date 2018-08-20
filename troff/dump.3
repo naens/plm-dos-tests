@@ -1,0 +1,23 @@
+.\" Source: ./dump.plm
+.\" Generated with ROBODoc Version 4\.99\.43 (Aug 19 2018)
+.\" ROBODoc (c) 1994\-2015 by Frans Slothouber and many others\.
+.TH dump 3 "Aug 20, 2018" plm-exercises "plm-exercises Reference"
+
+.SH NAME
+\fBdump\fR \-\- print file in hexadecimal and ascii
+
+.SH DESCRIPTION
+Prints a file, the name of which is given as command line argument, on
+the console\.  Each line corresponds to 16 bytes, the first column
+contain the offset of the first byte of the line from the beginning of
+the file, the second column contains the hexadecimal values of each
+byte and the third column contains the the ASCII representation of
+printable characters\.
+
+One screen is printed at a time if the file is large\.  The user can
+navigate using ^S for previous, ^X, space or enter for next\.  By typing
+'g', the user can enter the address to which to jump (the addresses are
+absolute offsets from the beginning of the file\.
+
+.SH USES
+consand sys modules
