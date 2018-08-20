@@ -40,8 +40,9 @@ do;
         declare pbyte address;
     end readkey;
 
-    readln: procedure (pstr) external;
+    readln: procedure (pstr, len) external;
         declare pstr address;
+        declare len word;
     end readln;
 
     term: procedure external;
