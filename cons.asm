@@ -22,6 +22,13 @@ global prchr, prstr, prhexbyte, prhexword, prstr, readkey, readln
 ;    Doesn't return anything.
 ;****
 prchr:
+	push	bp
+	mov	bp, sp
+	mov	dl, [bp+4]
+	mov	ah, conout
+	int	dos
+	pop	bp
+	ret
 
 ;****f* cons/prhexbyte
 ;  NAME
@@ -60,27 +67,27 @@ prhexword:
 ;     Doesn't return anything.
 ;****
 
-        segment data class=data
+	segment data class=data
 
-        segment code class=code
+	segment code class=code
 
 prstr:
-        push    bp
-        mov     bp, sp
-        push    si
-        mov     si, [bp+4]
+	push	bp
+	mov	bp, sp
+	push	si
+	mov	si, [bp+4]
 .lp:
-        lodsb
-        cmp     al, 0
-        je      .e
-        xchg    ax, dx
-        mov     ah, conout
-        int     dos
-        jmp     .lp
+	lodsb
+	cmp	al, 0
+	je	.e
+	xchg	ax, dx
+	mov	ah, conout
+	int	dos
+	jmp	.lp
 .e:
-        pop     si
-        pop     bp
-        ret
+	pop	si
+	pop	bp
+	ret
 
 ;****f* cons/readkey
 ;  NAME
@@ -90,11 +97,30 @@ prstr:
 ;    parameter.
 ;  PARAMETERS
 ;    pkey - address of the word value which has to be filled with data from
-;           the key press
+;	   the key press
 ;  RETURN VALUE
 ;    Doesn't return a value.
 ;****
 readkey:
+	push	bp
+	mov	bp, sp
+
+	mov	ah, coninq
+	int	dos
+        cmp	al, 32
+        jae	.l
+	add	al, 'A'-1
+.l:
+	mov	bl, al
+	mov	ah, 2
+	int	kbserv
+	mov	ah, al
+	mov	al, bl
+	
+	mov	bx, [bp+4]
+	mov	[bx], ax
+	pop	bp
+	ret
 
 ;****f* cons/readln
 ;  NAME
@@ -108,9 +134,5 @@ readkey:
 ;  RETURN VALUE
 ;    Doesn't return a value.
 ;****
-
-        segment data class=data
-
-        segment code class=code
 
 readln:
