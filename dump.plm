@@ -37,7 +37,7 @@ do;
     end prstr;
 
     readkey: procedure (pkey) external;
-        declare pbyte address;
+        declare pkey address;
     end readkey;
 
     readln: procedure (pstr, len) external;
@@ -48,6 +48,23 @@ do;
     term: procedure external;
     end term;
 
+    declare key word;
+    declare c byte;
+    declare f byte;
+    declare j word;
+    do while c <> 'q';
+        call readkey(.key);
+        c = byte(key);
+        call prchr(c);
+        f = byte(shr(key, 8));
+        call prchr(':');
+        do j = 0 to 7;
+            call prchr((f and 1) + '0');
+            f = shr(f, 1);
+        end;
+        call prchr(0DH);
+        call prchr(0AH);
+    end;
     call term;
 
 end;
