@@ -1,3 +1,7 @@
+conin		equ	01h
 conout		equ	02h
-dos		equ	21h
+coninq		equ	07h
 dosexit		equ	4ch
+
+kbserv		equ	16h
+dos		equ	21h
