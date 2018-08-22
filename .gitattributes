@@ -1,0 +1,3 @@
+*.def linguist-language=Assembly
+docs/* liguist-documentation
+troff/* liguist-documentation
