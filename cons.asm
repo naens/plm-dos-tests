@@ -1,4 +1,4 @@
-global prchr, prstr, prhexbyte, prhexword, prstr, readkey, readln
+global prchr, prstr, prcrlf, prhexbyte, prhexword, prstr, readkey, readln
 
 ;****h* plm-exercises/cons
 ;  NAME
@@ -89,6 +89,26 @@ prstr:
 	pop	bp
 	ret
 
+;****f* cons/prcrlf
+;  NAME
+;    prstr -- Prints CRLF
+;  DESCRIPTION
+;    Prints CRLF.
+;  PARAMETERS
+;     no parameters
+;  RETURN VALUE
+;     Doesn't return anything.
+;****
+prcrlf:
+	mov	dl, 0dh
+	mov	ah, conout
+	int	dos
+	mov	dl, 0ah
+	mov	ah, conout
+	int	dos
+	ret
+
+
 ;****f* cons/readkey
 ;  NAME
 ;    readkey -- Read a single keypress (modifiers not included)
@@ -136,3 +156,35 @@ readkey:
 ;****
 
 readln:
+	push	bp
+	mov	bp, sp
+
+	mov	bx, [bp+6]
+	push	bx
+	mov	ax, [bp+4]
+	dec	ax
+	mov	[bx], ax
+	mov	dx, bx
+
+	mov	ah, rdstr
+	int	dos
+
+	pop	bx
+	mov	bx, dx
+	mov	al, [bx+1]
+	mov	ah, 0
+	mov	si, ax
+	mov	byte [bx+si+2], 0
+
+	mov	di, 0
+.l:
+	cmp	di, si
+	ja	.e
+	mov	al, [bx+di+2]
+	mov	[bx+di], al
+	inc	di
+	jmp	.l
+.e:
+	call	prcrlf
+	pop	bp
+	ret

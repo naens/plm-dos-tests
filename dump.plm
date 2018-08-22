@@ -24,11 +24,11 @@ do;
         declare chr byte;
     end prchr;
 
-    prhexbyte: procedure (b) external;
+    prhexbyte: procedure (b) external;        /* TODO */
         declare b byte;
     end prhexbyte;
 
-    prhexword: procedure (w) external;
+    prhexword: procedure (w) external;        /* TODO */
         declare w word;
     end prhexword;
 
@@ -36,14 +36,22 @@ do;
         declare pstr address;
     end prstr;
 
+    prcrlf: procedure external;
+    end prcrlf;
+
     readkey: procedure (pkey) external;
         declare pkey address;
     end readkey;
 
-    readln: procedure (pstr, len) external;
+    readln: procedure (pstr, len) external;   /* TODO */
         declare pstr address;
         declare len word;
     end readln;
+
+    getargs: procedure (pargc, pargv) external; /* TODO */
+        declare pargc address;
+        declare pargv address;
+    end getargs;
 
     term: procedure external;
     end term;
@@ -52,6 +60,16 @@ do;
     declare c byte;
     declare f byte;
     declare j word;
+    declare buf (255) byte;
+
+    call readln(.buf, 255);
+    call prchr(':');
+    call prstr(.buf);
+    call prchr(':');
+    call prcrlf;
+    call prchr(':');
+/*
+
     do while c <> 'q';
         call readkey(.key);
         c = byte(key);
@@ -62,9 +80,9 @@ do;
             call prchr((f and 1) + '0');
             f = shr(f, 1);
         end;
-        call prchr(0DH);
-        call prchr(0AH);
+        call prcrlf;
     end;
+*/
     call term;
 
 end;

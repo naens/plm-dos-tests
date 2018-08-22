@@ -1,6 +1,7 @@
 conin		equ	01h
 conout		equ	02h
 coninq		equ	07h
+rdstr		equ	0ah
 dosexit		equ	4ch
 
 kbserv		equ	16h
