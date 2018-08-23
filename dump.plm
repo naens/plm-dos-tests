@@ -59,15 +59,45 @@ do;
     declare key word;
     declare c byte;
     declare f byte;
+    declare i word;
     declare j word;
     declare buf (255) byte;
+    declare argc word;
+    declare pargv address;
+    declare argv based pargv address;
+    declare pstr address;
+    declare str based pstr address;
 
+    call getargs(.argc, .pargv);
+    call prhexword(argc);
+    call prcrlf;
+    pstr = pargv;
+    do while str <> 0;
+        call prstr(str);
+        call prcrlf;
+        pstr = pstr + 2;
+    end;
+
+/*
     call readln(.buf, 255);
     call prchr(':');
     call prstr(.buf);
     call prchr(':');
     call prcrlf;
     call prchr(':');
+*/
+
+/*
+    i = 0;
+    do while buf(i) <> 0;
+        call prhexbyte(buf(i));
+        call prchr(':');
+        call prchr(buf(i));
+        call prcrlf;
+        i = i + 1;
+    end;
+*/
+
 /*
 
     do while c <> 'q';
