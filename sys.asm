@@ -26,11 +26,15 @@ global entry, getargs, term
 ;****
 
         segment data class=data
+psp	resw	1
 
         segment code class=code
-
-entry:	mov	ax, data
+entry:	
+	push	ds		; push psp value
+	mov	ax, data
 	mov	ds, ax
+	mov	es, ax
+	pop	word [psp]	; store psp
 	mov	ax, 0
 	jmp	ax
 
