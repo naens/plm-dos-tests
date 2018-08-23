@@ -41,6 +41,38 @@ prchr:
 ;    Doesn't return anything.
 ;****
 prhexbyte:
+	push	bp
+	mov	bp, sp
+	mov	dl, [bp+4]
+
+	call	pxbyte
+
+	pop	bp
+	ret
+
+; prints byte in dl in hex format (private)
+pxbyte:
+	mov	bl, dl
+	mov	cl, 4
+	shr	dl, cl
+	call	pxnib
+
+	mov	dl, bl
+	and	dl, 0fh
+	call	pxnib
+	ret
+
+; prints nibble in dl in hex format (private)
+pxnib:
+	cmp	dl, 10
+	jb	.pr
+	add	dl, 'a'-'0'-10
+.pr:
+	add	dl, '0'
+	mov	ah, conout
+	int	dos
+	ret
+
 
 ;****f* cons/prhexword
 ;  NAME
@@ -55,6 +87,16 @@ prhexbyte:
 ;    Doesn't return anything.
 ;****
 prhexword:
+	push	bp
+	mov	bp, sp
+	mov	dx, [bp+4]
+	xchg	dl, dh
+	call	pxbyte
+	mov	dl, dh
+	call	pxbyte
+	pop	bp
+	ret
+
 
 ;****f* cons/prstr
 ;  NAME
@@ -117,7 +159,7 @@ prcrlf:
 ;    parameter.
 ;  PARAMETERS
 ;    pkey - address of the word value which has to be filled with data from
-;	   the key press
+;           the key press
 ;  RETURN VALUE
 ;    Doesn't return a value.
 ;****
@@ -136,7 +178,7 @@ readkey:
 	int	kbserv
 	mov	ah, al
 	mov	al, bl
-	
+
 	mov	bx, [bp+4]
 	mov	[bx], ax
 	pop	bp
