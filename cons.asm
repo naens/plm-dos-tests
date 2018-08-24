@@ -28,7 +28,7 @@ prchr:
 	mov	ah, conout
 	int	dos
 	pop	bp
-	ret
+	ret	2
 
 ;****f* cons/prhexbyte
 ;  NAME
@@ -48,7 +48,7 @@ prhexbyte:
 	call	pxbyte
 
 	pop	bp
-	ret
+	ret	2
 
 ; prints byte in dl in hex format (private)
 pxbyte:
@@ -95,7 +95,7 @@ prhexword:
 	mov	dl, dh
 	call	pxbyte
 	pop	bp
-	ret
+	ret	2
 
 
 ;****f* cons/prstr
@@ -129,7 +129,7 @@ prstr:
 .e:
 	pop	si
 	pop	bp
-	ret
+	ret	2
 
 ;****f* cons/prcrlf
 ;  NAME
@@ -182,7 +182,7 @@ readkey:
 	mov	bx, [bp+4]
 	mov	[bx], ax
 	pop	bp
-	ret
+	ret	2
 
 ;****f* cons/readln
 ;  NAME
@@ -229,4 +229,4 @@ readln:
 .e:
 	call	prcrlf
 	pop	bp
-	ret
+	ret	4
