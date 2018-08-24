@@ -1,0 +1,34 @@
+#!/usr/bin/bash
+
+lcfiles()
+{
+    local files=$1
+    for file in $files
+    do
+        local fn=$(basename $file)
+        local dn=$(dirname $file)
+	    local lcfn=$(echo "$fn" | tr [:upper:] [:lower:])
+        mv $dn/$fn $dn/$lcfn
+    done
+}
+
+test_build()
+{
+    local dir=$1
+    local name=$2
+    local fn=$dir/$name
+	./dosexec plm86 $fn.plm code small xref symbols
+    lcfiles "$(find $dir | grep -i $name | grep '[A-Z]')"
+
+    wcl @wcl.lnk -zq -d2 -lr -bc -bcl=dos -fe=$fn.exe $fn.obj sys.obj cons.obj
+	mv $name.map $dir
+}
+
+tdir=tests
+
+for f in $tdir/*.plm
+do
+    fn=$(basename $f)
+    name="${fn%.*}"
+    test_build $tdir $name
+done

@@ -1,0 +1,50 @@
+testargs:
+do;
+
+    prchr: procedure (chr) external;
+        declare chr byte;
+    end prchr;
+
+    prhexbyte: procedure (b) external;
+        declare b byte;
+    end prhexbyte;
+
+
+    prstr: procedure (pstr) external;
+        declare pstr address;
+    end prstr;
+
+    prcrlf: procedure external;
+    end prcrlf;
+
+    getargs: procedure (pargc, pargv) external;
+        declare pargc address;
+        declare pargv address;
+    end getargs;
+
+    term: procedure external;
+    end term;
+
+    declare i word;
+    declare j word;
+    declare argc word;
+    declare pargv address;
+    declare argv based pargv address;
+    declare pstr address;
+    declare str based pstr address;
+
+    call getargs(.argc, .pargv);
+    call prcrlf;
+    pstr = pargv;
+    do i = 0 to argc - 1;
+        call prhexbyte(byte(i));
+        call prchr(':');
+        call prstr(str);
+        call prcrlf;
+        pstr = pstr + 2;
+    end;
+
+
+    call term;
+
+end;

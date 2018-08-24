@@ -1,0 +1,38 @@
+readkey:
+do;
+
+    prchr: procedure (chr) external;
+        declare chr byte;
+    end prchr;
+
+    prcrlf: procedure external;
+    end prcrlf;
+
+    readkey: procedure (pkey) external;
+        declare pkey address;
+    end readkey;
+
+    term: procedure external;
+    end term;
+
+    declare key word;
+    declare c byte;
+    declare f byte;
+    declare j word;
+
+    do while c <> 'q';
+        call readkey(.key);
+        c = byte(key);
+        call prchr(c);
+        f = byte(shr(key, 8));
+        call prchr(':');
+        do j = 0 to 7;
+            call prchr((f and 1) + '0');
+            f = shr(f, 1);
+        end;
+        call prcrlf;
+    end;
+
+    call term;
+
+end;
