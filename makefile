@@ -3,6 +3,9 @@
 
 all: hello.exe dump.exe
 
+run: .SYMBOLIC
+	@./doswin
+
 hello.exe: hello.plm wcl.lnk sys.obj cons.obj makefile
 	./dosexec plm86 hello.plm code small xref symbols
 	wcl @wcl.lnk -zq -d2 -lr -bc -bcl=dos -fe=hello.exe hello.obj sys.obj cons.obj

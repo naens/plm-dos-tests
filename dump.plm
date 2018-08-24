@@ -69,14 +69,14 @@ do;
     declare str based pstr address;
 
     call getargs(.argc, .pargv);
-    call prhexword(argc);
     call prcrlf;
     pstr = pargv;
-    do while str <> 0;
+    do i = 0 to argc - 1;
         call prstr(str);
         call prcrlf;
         pstr = pstr + 2;
     end;
+
 
 /*
     call readln(.buf, 255);
@@ -85,9 +85,7 @@ do;
     call prchr(':');
     call prcrlf;
     call prchr(':');
-*/
 
-/*
     i = 0;
     do while buf(i) <> 0;
         call prhexbyte(buf(i));
@@ -97,6 +95,7 @@ do;
         i = i + 1;
     end;
 */
+
 
 /*
 

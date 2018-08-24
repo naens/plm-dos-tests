@@ -2,6 +2,8 @@ conin		equ	01h
 conout		equ	02h
 coninq		equ	07h
 rdstr		equ	0ah
+alloc		equ	48h
+freemem		equ	49h
 dosexit		equ	4ch
 
 kbserv		equ	16h

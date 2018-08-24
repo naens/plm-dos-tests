@@ -1,14 +1,21 @@
 #!/bin/sh
 
 command="$@"
-tmpfile='tmp.$$$'
-SDL_AUDIODRIVER=dummy dosbox \
+if [[ -z "$command" ]]; then
+    SDL_AUDIODRIVER=dummy dosbox \
+		-c "mount c $(pwd)" \
+		-c "c:" \
+		-c "cls"
+else
+    tmpfile='tmp.$$$'
+    SDL_AUDIODRIVER=dummy dosbox \
 		-c "mount c $(pwd)" \
 		-c "c:" \
 		-c "cls" \
 		-c "$command" \
 		-c "pause" \
 		-c "exit"
+fi
 
 for f in *
 do
