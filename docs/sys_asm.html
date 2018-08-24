@@ -27,8 +27,9 @@
 <ul>
 <li>1. <a href="#robo1">plm-exercises/sys</a></li>
 <ul>
-<li>1.1. <a href="#robo10">sys/entry</a></li>
-<li>1.2. <a href="#robo11">sys/term</a></li>
+<li>1.1. <a href="#robo11">sys/entry</a></li>
+<li>1.2. <a href="#robo12">sys/getargs</a></li>
+<li>1.3. <a href="#robo13">sys/term</a></li>
 </ul>
 </ul>
 <hr />
@@ -48,7 +49,7 @@
 
 <hr />
 <a name="sys2fentry"></a>
-<a name="robo10"></a><h2>sys/entry [ Functions ]</h2>
+<a name="robo11"></a><h2>sys/entry [ Functions ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo1">sys</a> ] [ <a href="./robo_functions.html#robo_top_of_doc">Functions</a> ]</p>
 <p class="item_name">NAME</p>
@@ -68,8 +69,28 @@
 </pre>
 
 <hr />
+<a name="sys2fgetargs"></a>
+<a name="robo12"></a><h2>sys/getargs [ Functions ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo1">sys</a> ] [ <a href="./robo_functions.html#robo_top_of_doc">Functions</a> ]</p>
+<p class="item_name">NAME</p>
+<pre>    <strong>getargs</strong> -- get command line arguments vector
+</pre>
+<p class="item_name">DESCRIPTION</p>
+<pre>    Allocates the vector of pointers to the command line arguments.
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre>    pargc - pointer to a word value, for the count of arguments
+    pargv - pointer to an address value, that will contain the address of
+            the allocated array of adresses of command line arguments.
+</pre>
+<p class="item_name">RETURN VALUE</p>
+<pre>    Doesn't return a value.
+</pre>
+
+<hr />
 <a name="sys2fterm"></a>
-<a name="robo11"></a><h2>sys/term [ Functions ]</h2>
+<a name="robo13"></a><h2>sys/term [ Functions ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo1">sys</a> ] [ <a href="./robo_functions.html#robo_top_of_doc">Functions</a> ]</p>
 <p class="item_name">NAME</p>
@@ -87,7 +108,7 @@
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./sys.asm with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Mon Aug 20 2018 21:08:32
+<p>Generated from ./sys.asm with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Fri Aug 24 2018 18:32:12
 </p>
 </div> <!-- footer -->
 </body>
