@@ -1,5 +1,7 @@
 global entry, getargs, term
 
+extern prchr, prstr, prcrlf, prhexbyte, prhexword, prstr, readkey, readln
+
 ;****h* plm-exercises/sys
 ;  NAME
 ;    sys -- System library
@@ -27,14 +29,38 @@ global entry, getargs, term
 
         segment data class=data
 psp		resw	1
+tail		resb	0ffh
+tlen		resb	1
 
         segment code class=code
-entry:	
+entry:
+	; save psp
 	push	ds		; push psp value
 	mov	ax, data
 	mov	ds, ax
 	pop	ax
 	mov	[psp], ax	; store psp
+
+	; copy tail
+	mov	es, ax
+	mov	cl, [es:80h]
+	mov	[tlen], cl
+	mov	si, 81h
+	mov	di, tail
+.l:
+	cmp	cl, 0
+	je	.e
+	mov	al, [es:si]
+	mov	[di], al
+
+	inc	di
+	inc	si
+	dec	cl
+	jmp	.l
+.e:
+	mov	byte [di], 0
+
+	; jump to the code
 	mov	ax, 0
 	jmp	ax
 
@@ -51,7 +77,8 @@ entry:
 ;    Doesn't return a value.
 ;****
         segment data class=data
-argv		resw	10
+max_argv	equ	15
+argv		resw	max_argv+1
 teststr		db      'test', 0
 hellostr	db      'HELLO!', 0
 tmpstr		resb	100
@@ -61,10 +88,10 @@ getargs:
 	push	bp
 	mov	bp, sp
 
-	mov	di, tmpstr
 	call	getname
 
 ; copy the program name from es:bx to local variable
+	mov	di, tmpstr
 .l:
 	je	.m
 	mov	al, [es:bx]
@@ -75,27 +102,54 @@ getargs:
 	inc	di
 	jmp	.l
 .m:
+	mov	word [argv], tmpstr
 
-; TODO copy cli arguments into argv while counting arguments
+; put cli argument addresses into argv
+	mov	si, tail
+	mov	di, 2		; second item of argv
+	mov	dx, 1		; is_space in dx=true
+	mov	cx, 1		; count of arguments
 
-	mov	ax, [psp]
-	mov	es, ax
-	mov	ax, [es:80h]
-	mov	es, ax		; set es:0000 to the cli tail
+.tl:
+	mov	al, [si]
+	cmp	al, 0
+	je	.te
 
+	; from space to word => store word
+	cmp	dx, 1
+	jne	.tw
+	cmp	al, ' '
+	je	.tc
+	mov	[argv+di], si
+	add	di, 2
+	mov	dx, 0
+	inc	cx
+	jmp	.tc
 
-	mov	word [argv], teststr
-	mov	word [argv+2], hellostr
-	mov	word [argv+4], tmpstr
-	mov	word [argv+6], 0
+	; from word to space => store null
+.tw:
+	cmp	al, ' '
+	jne	.tc
+	mov	byte [si], 0
+	cmp	cx, max_argv	; if maximum reached, stop here
+	je	.te
+	mov	dx, 1
+.tc:
+	inc	si
+	jmp	.tl
+.te:
+
+	; terminate argv with null
+	mov	word [argv+di], 0
 
 	mov	bx, [bp+6]	; set argc value
-	mov	word [bx], 1
+	mov	word [bx], cx
+
 	mov	bx, [bp+4]	; set pointer to argv
 	mov	word [bx], argv
 
 	pop	bp
-	ret
+	ret	4
 
 ; return the program name string in es:bx (private)
 getname:
