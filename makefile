@@ -32,5 +32,5 @@ docs: .SYMBOLIC
 troff: .SYMBOLIC
 	robodoc --src . --doc ./troff --troff --multidoc --sections --tell
 
-tests: sys.obj cons.obj .SYMBOLIC
+tests: sys.obj cons.obj fio.obj .SYMBOLIC
 	./buildtests
