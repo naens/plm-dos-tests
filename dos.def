@@ -2,9 +2,19 @@ conin		equ	01h
 conout		equ	02h
 coninq		equ	07h
 rdstr		equ	0ah
+create		equ	3ch
+open		equ	3dh
+close		equ	3eh
+read		equ	3fh
+write		equ	40h
+delete		equ	41h
+seek		equ	42h
 alloc		equ	48h
 freemem		equ	49h
 dosexit		equ	4ch
+findfirst	equ	4eh
+findnext	equ	4fh
+rename		equ	56h
 
 kbserv		equ	16h
 dos		equ	21h
