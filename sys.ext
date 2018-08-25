@@ -1,0 +1,10 @@
+entry: procedure external;
+end entry;
+
+getargs: procedure (pargc, pargv) external;
+    declare pargc address;
+    declare pargv address;
+end getargs;
+
+term: procedure external;
+end term;

@@ -1,29 +1,9 @@
 testargs:
 do;
 
-    prchr: procedure (chr) external;
-        declare chr byte;
-    end prchr;
+$include (cons.ext)
+$include (sys.ext)
 
-    prhexbyte: procedure (b) external;
-        declare b byte;
-    end prhexbyte;
-
-
-    prstr: procedure (pstr) external;
-        declare pstr address;
-    end prstr;
-
-    prcrlf: procedure external;
-    end prcrlf;
-
-    getargs: procedure (pargc, pargv) external;
-        declare pargc address;
-        declare pargv address;
-    end getargs;
-
-    term: procedure external;
-    end term;
 
     declare i word;
     declare j word;

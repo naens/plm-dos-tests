@@ -1,19 +1,8 @@
 readkey:
 do;
 
-    prchr: procedure (chr) external;
-        declare chr byte;
-    end prchr;
-
-    prcrlf: procedure external;
-    end prcrlf;
-
-    readkey: procedure (pkey) external;
-        declare pkey address;
-    end readkey;
-
-    term: procedure external;
-    end term;
+$include (cons.ext)
+$include (sys.ext)
 
     declare key word;
     declare c byte;

@@ -20,41 +20,8 @@
 dump:
 do;
 
-    prchr: procedure (chr) external;
-        declare chr byte;
-    end prchr;
-
-    prhexbyte: procedure (b) external;
-        declare b byte;
-    end prhexbyte;
-
-    prhexword: procedure (w) external;
-        declare w word;
-    end prhexword;
-
-    prstr: procedure (pstr) external;
-        declare pstr address;
-    end prstr;
-
-    prcrlf: procedure external;
-    end prcrlf;
-
-    readkey: procedure (pkey) external;
-        declare pkey address;
-    end readkey;
-
-    readln: procedure (pstr, len) external;
-        declare pstr address;
-        declare len word;
-    end readln;
-
-    getargs: procedure (pargc, pargv) external;
-        declare pargc address;
-        declare pargv address;
-    end getargs;
-
-    term: procedure external;
-    end term;
+$include (cons.ext)
+$include (sys.ext)
 
     declare key word;
     declare c byte;

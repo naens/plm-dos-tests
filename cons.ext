@@ -1,0 +1,27 @@
+prchr: procedure (chr) external;
+    declare chr byte;
+end prchr;
+
+prstr: procedure (pstr) external;
+    declare pstr address;
+end prstr;
+
+prcrlf: procedure external;
+end prcrlf;
+
+prhexbyte: procedure (b) external;
+    declare b byte;
+end prhexbyte;
+
+prhexword: procedure (w) external;
+    declare w word;
+end prhexword;
+
+readkey: procedure (pkey) external;
+    declare pkey address;
+end readkey;
+
+readln: procedure (pstr, len) external;
+    declare pstr address;
+    declare len word;
+end readln;
