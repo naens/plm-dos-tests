@@ -1,4 +1,4 @@
-global prchr, prstr, prcrlf, prhexbyte, prhexword, prstr, readkey, readln
+global prchr, prstr, prcrlf, prhexbyte, prhexword, readkey, readln
 
 ;****h* plm-exercises/cons
 ;  NAME

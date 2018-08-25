@@ -8,7 +8,7 @@ extern prchr, prstr, prcrlf, prhexbyte, prhexword, prstr, readkey, readln
 ;  DESCRIPTION
 ;    Module that contains system-related functions.
 ;  USES
-;    dos.def
+;    dos.def, cons.asm
 ;****
 
 %include "dos.def"
@@ -76,14 +76,14 @@ entry:
 ;  RETURN VALUE
 ;    Doesn't return a value.
 ;****
-        segment data class=data
-max_argv	equ	15
+        segment data
+max_argv	equ	15		; TODO: replace with alloc/freemem
 argv		resw	max_argv+1
 teststr		db      'test', 0
 hellostr	db      'HELLO!', 0
 tmpstr		resb	100
 
-        segment code class=code
+        segment code
 getargs:
 	push	bp
 	mov	bp, sp
