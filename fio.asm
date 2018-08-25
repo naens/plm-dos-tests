@@ -27,6 +27,8 @@ openmode	resb 1		; 2 bits: open mode: 01:r, 10:w, 11:rw (bits: rw)
 bufmodified	resb 1		; boolean: buffer modified or not
 bufloaded	resb 1		; boolean: buffer loaded or not
 
+	segment code	class=code
+
 ;****f* fio/fopen
 ;  NAME
 ;    fopen -- open a file
@@ -48,7 +50,8 @@ bufloaded	resb 1		; boolean: buffer loaded or not
 ;     * 0ffffh on error
 ;****
 
-	segment code	class=code
+	segment data
+	segment code
 fopen:
 	push	bp
 	mov	bp, sp
@@ -78,13 +81,35 @@ fopen:
 	mov	ax, 0
 
 .end:
+	pop	bp
 	ret	6
 
+;****f* fio/fclose
+;  NAME
+;    fclose -- close a file
+;  DESCRIPTION
+;    Closes a file.
+;  PARAMETERS
+;    pfile - pointer to file data
+;  RETURN VALUE
+;    Doesn't return anything.
+;****
 
-
-
+	segment data
+	segment code
 
 fclose:
+	push	bp
+	mov	bp, sp
+
+	mov	ah, close
+	mov	bx, [fhandle]
+	int	dos
+
+	pop	bp
+	ret	2
+
+
 freadchr:
 freadbuf:
 fwritechr:
