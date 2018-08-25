@@ -1,3 +1,6 @@
 *.def linguist-language=Assembly
+*.plm linguist-language=PL/M
+*.ext linguist-language=PL/M
+*.lit linguist-language=PL/M
 docs/* linguist-documentation
 troff/* linguist-documentation
