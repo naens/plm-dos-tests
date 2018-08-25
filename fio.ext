@@ -1,0 +1,27 @@
+fopen: procedure (pfname, readable, writable) word external;
+    declare pfname address;
+    declare readable byte;
+    declare writable byte;
+end fopen;
+
+fclose: procedure (f) external;
+    declare f word;
+end fclose;
+
+/* freadchr */
+freadchr: procedure (f, pchr) word external;
+    declare f word;
+    declare pchr address;
+end freadchr;
+
+/* freadbuf */
+
+feof: procedure (f) word external;
+    declare f word;
+end feof;
+
+/* fwritechr */
+/* fwritebuf */
+/* fwritestr */
+/* fseek */
+/* ftrunc */
