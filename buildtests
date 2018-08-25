@@ -20,7 +20,7 @@ test_build()
 	./dosexec plm86 $fn.plm code small xref symbols
     lcfiles "$(find $dir | grep -i $name | grep '[A-Z]')"
 
-    wcl @wcl.lnk -zq -d2 -lr -bc -bcl=dos -fe=$fn.exe $fn.obj sys.obj cons.obj
+    wcl @wcl.lnk -zq -d2 -lr -bc -bcl=dos -fe=$fn.exe $fn.obj sys.obj cons.obj fio.obj
 	mv $name.map $dir
 }
 
