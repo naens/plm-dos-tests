@@ -1,0 +1,31 @@
+.\" Source: ./fio.asm
+.\" Generated with ROBODoc Version 4\.99\.43 (Aug 19 2018)
+.\" ROBODoc (c) 1994\-2015 by Frans Slothouber and many others\.
+.TH fopen 3 "Aug 25, 2018" fio "fio Reference"
+
+.SH NAME
+\fBfopen\fR \-\- open a file
+
+.SH DESCRIPTION
+Opens a file or create if it does not exist\.
+.IP *
+r opens the file as read\-only
+.IP "\fBw opens the file as write-only\fR"
+its contents are erased if it
+exists, if not it's created
+.IP "\fBrw opens the file in read/write mode\fR"
+if it does not exist, it is
+created
+
+.SH PARAMETERS
+fname \- address: pointer to null\-terminated string, representing
+the location of the file
+r \- boolean: open as readable
+w \- boolean: open as writable, create if does not exist
+
+.SH RETURN VALUE
+.IP "\fBpfile on success\fR"
+pointer to file data to use for other calls
+returned in ax: not to be treated as a pointer
+.IP *
+0ffffh on error

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html  xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Style-Type" content="text/css" />
+<meta http-equiv="Content-type" content="text/html; charset=ISO-8859-1" />
+<link rel="stylesheet" href="./robodoc.css" type="text/css" />
+<title>./fio.asm</title>
+<!-- Source: ./fio.asm -->
+<!-- Generated with ROBODoc Version 4.99.43 (Aug 19 2018) -->
+</head>
+<body>
+<div id="logo">
+<a name="robo_top_of_doc"></a>
+</div> <!-- logo -->
+<div id="navigation">
+<a class="menuitem" href="./toc_index.html#top">Table of Contents</a>
+<a class="menuitem" href="./robo_sourcefiles.html#top">Sourcefiles</a>
+<a class="menuitem" href="./masterindex.html#top">Index</a>
+<a class="menuitem" href="./robo_functions.html#top">Functions</a>
+<a class="menuitem" href="./robo_modules.html#top">Modules</a>
+<a class="menuitem" href="./robo_program.html#top">Program</a>
+</div> <!-- navigation -->
+<div id="content">
+<h3>TABLE OF CONTENTS</h3>
+<ul>
+<li>1. <a href="#robo1">plm-exercises/fio</a></li>
+<ul>
+<li>1.1. <a href="#robo10">fio/fopen</a></li>
+</ul>
+</ul>
+<hr />
+<a name="plm2dexercises2ffio"></a>
+<a name="robo1"></a><h2>plm-exercises/fio [ Modules ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./robo_modules.html#robo_top_of_doc">Modules</a> ]</p>
+<p class="item_name">NAME</p>
+<pre>    <strong>fio</strong> -- File Input and Output
+</pre>
+<p class="item_name">DESCRIPTION</p>
+<pre>    Module for reading and writing to files.
+</pre>
+<p class="item_name">USES</p>
+<pre>     dos.def, <a href="./cons_asm.html#robo_top_of_doc">cons.asm</a>
+</pre>
+
+<hr />
+<a name="fio2ffopen"></a>
+<a name="robo10"></a><h2>fio/fopen [ Functions ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo1">fio</a> ] [ <a href="./robo_functions.html#robo_top_of_doc">Functions</a> ]</p>
+<p class="item_name">NAME</p>
+<pre>    <strong>fopen</strong> -- open a file
+</pre>
+<p class="item_name">DESCRIPTION</p>
+<pre>    Opens a file or create if it does not exist.
+      * r opens the file as read-only
+      * w opens the file as write-only: its contents are erased if it
+          exists, if not it's created
+      * rw opens the file in read/write mode: if it does not exist, it is
+           created
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre>    fname - address: pointer to null-terminated string, representing
+            the location of the file
+    r - boolean: open as readable
+    w - boolean: open as writable, create if does not exist
+</pre>
+<p class="item_name">RETURN VALUE</p>
+<pre>     * pfile on success: pointer to file data to use for other calls
+       returned in ax: not to be treated as a pointer
+     * 0ffffh on error
+</pre>
+
+</div> <!-- content -->
+<div id="footer">
+<p>Generated from ./fio.asm with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sat Aug 25 2018 15:50:22
+</p>
+</div> <!-- footer -->
+</body>
+</html>
