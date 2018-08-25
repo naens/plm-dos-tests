@@ -1,0 +1,42 @@
+readfile:
+do;
+
+$include('sys.ext')
+$include('cons.ext')
+$include('fio.ext')
+$include('const.lit')
+
+    declare f word;
+    declare c byte;
+
+    call prstr(.('Opening the file...', 0dh, 0ah, 0));
+
+    f = fopen(.('test.txt', 0), true, false);
+    if f <> 0ffffh then
+    do;
+        call prstr(.('File open OK!', 0dh, 0ah, 0));
+        do while not feof(f);
+            if freadchr(f, .c) = 0 then
+            do;
+                call prchr('{');
+                call prhexbyte(c);
+                call prchr(':');
+                if c >= ' ' and c < 7fh then
+                    call prchr(c);
+                else
+                    call prchr('.');
+                call prchr('}');
+                call prcrlf;
+            end;
+        end;
+        call prstr(.('EOF', 0dh, 0ah, 0));
+        call fclose(f);
+        call prstr(.('File close OK!', 0dh, 0ah, 0));
+    end;
+    else
+    do;
+        call prstr(.('File open ERROR.', 0dh, 0ah, 0));
+    end;
+
+    call term;
+end readfile;
