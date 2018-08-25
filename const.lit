@@ -1,0 +1,2 @@
+declare true literally '1';
+declare false literally '0';
