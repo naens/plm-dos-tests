@@ -14,7 +14,7 @@ extern prchr, prstr, prcrlf, prhexbyte, prhexword, prstr, readkey, readln
 
 %include "dos.def"
 
-bufsz		equ	512	; the size of the buffer and of the block
+bufsz		equ	128	; the size of the buffer and of the block
 
 ; TODO: add dynamic file data and buffer allocation on open, free on close
 
@@ -184,12 +184,20 @@ freadchr:
 	mov	[bx], al
 	inc	word [bufpos]
 
+;	mov	ax, [bufpos]
+;	push	ax
+;	call	prhexword
+
 	; if bufpos = bufsz then read next block
-	mov	ax, bufpos
+	mov	ax, [bufpos]
 	cmp	ax, bufsz
 	jne	.done
 
 	; load block
+;	mov	ax, '#'
+;	push	ax
+;	call	prchr
+
 	mov	ah, read
 	mov	bx, [fhandle]
 	mov	cx, bufsz
