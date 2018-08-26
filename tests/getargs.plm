@@ -14,7 +14,6 @@ $include (sys.ext)
     declare str based pstr address;
 
     call getargs(.argc, .pargv);
-    call prcrlf;
     pstr = pargv;
     do i = 0 to argc - 1;
         call prhexbyte(byte(i));
@@ -23,7 +22,6 @@ $include (sys.ext)
         call prcrlf;
         pstr = pstr + 2;
     end;
-
 
     call term;
 
