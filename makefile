@@ -28,6 +28,7 @@ clean: .SYMBOLIC
 
 docs: .SYMBOLIC
 	robodoc --src . --doc ./docs --html --multidoc --sections --tell --toc --index
+	mv docs/masterindex.html docs/index.html
 
 troff: .SYMBOLIC
 	robodoc --src . --doc ./troff --troff --multidoc --sections --tell
