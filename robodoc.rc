@@ -4,6 +4,7 @@ ignore files:
     docs
     troff
     .git
+    tests
 accept files:
     *.asm
     *.plm
