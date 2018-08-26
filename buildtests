@@ -26,7 +26,14 @@ test_build()
 
 tdir=tests
 
-for f in $tdir/*.plm
+singlefile="$1"
+if [[ -n "$singlefile" && -f "$singlefile" ]]
+then
+    files="$singlefile"
+else
+    files="$tdir/*.plm"
+fi
+for f in $files
 do
     fn=$(basename $f)
     name="${fn%.*}"
