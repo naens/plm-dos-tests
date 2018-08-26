@@ -69,25 +69,19 @@ fopen:
 	jc .error
 
 	mov	word [fhandle], ax
-	mov	word [curblk], 0
-	mov	word [bufpos], 0
-	mov	byte [bufmodified], 0
 
 	; skipping loading first block if file not readable (write-only)
 	test	byte [openmode], 1
 	jz	.nold
 
 	; load first block
-	mov	ah, read
-	mov	bx, [fhandle]
-	mov	cx, bufsz
-	mov	dx, fbuf
-	int	dos
+	call	rdfstblk
 	jc	.error
-	mov	[buflen], ax
-	mov	byte [bufloaded], 1
 	jmp	.endld
 .nold:
+	mov	word [curblk], 0
+	mov	word [bufpos], 0
+	mov	byte [bufmodified], 0
 	mov	byte [bufloaded], 0
 
 .endld:
@@ -100,6 +94,42 @@ fopen:
 .end:
 	pop	bp
 	ret	6
+
+; subroutine: read first block (private)
+; updates buffer and variables: buflen, bufpos, curblk, bufmodified
+; can be used to read the first block, but not the rest
+rdfstblk:
+	mov	ah, read
+	mov	bx, [fhandle]
+	mov	cx, bufsz
+	mov	dx, fbuf
+	int	dos
+	jc	.error
+	mov	[buflen], ax
+	mov	word [bufpos], 0
+	mov	word [curblk], 0
+	mov	byte [bufmodified], 0
+	mov	byte [bufloaded], 1
+.error:
+	ret
+	
+
+; subroutine: read next block (private)
+; updates buffer and variables: buflen, bufpos, curblk, bufmodified
+; can be used to read after the first block
+rdnxtblk:
+	mov	ah, read
+	mov	bx, [fhandle]
+	mov	cx, bufsz
+	mov	dx, fbuf
+	int	dos
+	jc	.error
+	mov	[buflen], ax
+	mov	word [bufpos], 0
+	inc	word [curblk]
+	mov	byte [bufmodified], 0
+.error:
+	ret
 
 ;****f* fio/fclose
 ;  NAME
@@ -118,6 +148,8 @@ fopen:
 fclose:
 	push	bp
 	mov	bp, sp
+
+	; TODO: write current block if writable and block modified
 
 	mov	ah, close
 	mov	bx, [fhandle]
@@ -143,7 +175,7 @@ fclose:
 ;    if not readable then
 ;      return -1
 ;    end if
-;    if buflen < bufsz and bufpos = buflen - 1 then
+;    if buflen < bufsz and bufpos = buflen then
 ;      return -1
 ;    end if
 ;    *pchar = fbuf[bufpos]
@@ -184,29 +216,14 @@ freadchr:
 	mov	[bx], al
 	inc	word [bufpos]
 
-;	mov	ax, [bufpos]
-;	push	ax
-;	call	prhexword
-
 	; if bufpos = bufsz then read next block
 	mov	ax, [bufpos]
 	cmp	ax, bufsz
 	jne	.done
 
 	; load block
-;	mov	ax, '#'
-;	push	ax
-;	call	prchr
-
-	mov	ah, read
-	mov	bx, [fhandle]
-	mov	cx, bufsz
-	mov	dx, fbuf
-	int	dos
+	call	rdnxtblk
 	jc	.error
-	mov	[buflen], ax
-	mov	word [bufpos], 0
-	inc	word [curblk]
 .done:
 	mov	ax, 0
 	jmp	.end
@@ -217,10 +234,106 @@ freadchr:
 	ret	4
 
 
-; reads a single block, updates variables
-
+;****f* fio/freadbuf
+;  NAME
+;    freadbuf -- read file into buffer
+;  DESCRIPTION
+;    Read sz bytes from file and store at location of address pbuf.  Returns
+;    the number of bytes read on success and 0ffffh on error.
+;  PARAMETERS
+;    pfile - pointer to the file data
+;    pdest - pointer to the destination buffer
+;    sz - number of bytes that can be stored in the destination buffer
+;  RETURN VALUE
+;    On success returns the number of bytes read.  If an EOF condition
+;    occurred during the file read, the return value might be smaller than
+;    sz.
+;****
+;  VAR
+;    length - number a bytes to copy in the current loop iteration
+;     count - bytes copied so far, at the end: the return value
+;  PSEUDOCODE
+;    if not readable then
+;        return -1
+;    count := 0
+;    loop
+;        let tmp1 = buflen - bufpos
+;        let tmp2 = sz - count
+;        if tmp1 < tmp2 then
+;            length := tmp1
+;        else
+;            length := tmp2
+;        do while length > 0
+;            pdest[count] := fbuf[bufpos]
+;            inc count
+;            inc bufpos
+;            dec length
+;        end
+;        if bufpos = bufsz then
+;            dos read next block => buflen (on error return -1)
+;            bufpos := 0
+;        else
+;           exit loop
+;    end loop
+;    return count
 freadbuf:
+	push	bp
+	mov	bp, sp
+
+	; if not readable then return 0ffffh
+	mov	ax, [openmode]
+	test	ax, 1
+	jz	.error
+
+	; count := 0
+	mov	di, 0
+.loop:
+	mov	cx, [buflen]
+	sub	cx, [bufpos]		; tmp1 in cx
+	mov	ax, [bp+4]
+	sub	ax, di			; tmp2 in ax
+	cmp	cx, ax
+	jb	.l1			; if not tmp1 < tmp then
+	mov	cx, ax			;     length = tmp2
+.l1:
+	mov	si, [bufpos]		; bufpos in si
+	mov	bx, [bp+6]		; pdest in bx
+
+	; do-while loop
+.copyloop:
+	cmp	cx, 0
+	je	.copyend
+	mov	al, [fbuf+si]
+	mov	[bx+di], al
+	inc	si
+	inc	di
+	dec	cx
+	jmp	.copyloop
+.copyend:
+
+	; if bufpos = bufsz then dos read next block
+	cmp	si, bufsz
+	jne	.loopexit
+	call	rdnxtblk
+	jc	.error
+	jmp	.loop
+
+.loopexit:
+	mov	[bufpos], si		; update bufpos from si
+	mov	ax, di			; return count in ax
+	jmp	.end
+
+.error:
+	mov	ax, 0ffffh
+
+.end:
+	pop	bp
+	ret	6
+
+
+
 fwritechr:
+
 fwritebuf:
 
 ;****f* fio/feof

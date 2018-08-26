@@ -8,13 +8,16 @@ fclose: procedure (f) external;
     declare f word;
 end fclose;
 
-/* freadchr */
 freadchr: procedure (f, pchr) word external;
     declare f word;
     declare pchr address;
 end freadchr;
 
-/* freadbuf */
+freadbuf: procedure (f, pdest, sz) word external;
+    declare f word;
+    declare pdest address;
+    declare sz word;
+end freadbuf;
 
 feof: procedure (f) word external;
     declare f word;
