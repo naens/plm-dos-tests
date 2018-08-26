@@ -9,6 +9,10 @@ end prstr;
 prcrlf: procedure external;
 end prcrlf;
 
+println: procedure (pstr) external;
+    declare pstr address;
+end println;
+
 prhexbyte: procedure (b) external;
     declare b byte;
 end prhexbyte;

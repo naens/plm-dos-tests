@@ -1,4 +1,4 @@
-global prchr, prstr, prcrlf, prhexbyte, prhexword, readkey, readln
+global prchr, prstr, prcrlf, println, prhexbyte, prhexword, readkey, readln
 
 ;****h* plm-exercises/cons
 ;  NAME
@@ -131,6 +131,7 @@ prstr:
 	pop	bp
 	ret	2
 
+
 ;****f* cons/prcrlf
 ;  NAME
 ;    prstr -- Prints CRLF
@@ -149,6 +150,29 @@ prcrlf:
 	mov	ah, conout
 	int	dos
 	ret
+
+
+;****f* cons/println
+;  NAME
+;    println -- Prints a string followed by a CRLF
+;  DESCRIPTION
+;    Prints a string and then CRLF afterwards.
+;  PARAMETERS
+;    pstr - pointer to the null-terminated string to print
+;  RETURN VALUE
+;     Doesn't return anything.
+;****
+println:
+	push	bp
+	mov	bp, sp
+
+	mov	ax, [bp+4]
+	push	ax
+	call	prstr
+	call	prcrlf
+
+	pop	bp
+	ret	2
 
 
 ;****f* cons/readkey
