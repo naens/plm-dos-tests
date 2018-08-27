@@ -13,7 +13,7 @@ $include('const.lit')
     declare argv based pargv address;
     declare pname address;
     declare name based pname address;
-    declare line$len literally '10';
+    declare line$len literally '16';
     declare str(line$len) byte;
 
     declare f word;
@@ -31,10 +31,9 @@ $include('const.lit')
     if f <> 0ffffh then
     do;
         call println(.('File open OK!', 0));
-        n = line$len;
 
-        do while n = line$len;
-            n = freadbuf(f, .str, line$len);
+        n = freadbuf(f, .str, line$len);
+        do while n > 0;
             call prhexword(n);
             call prchr('|');
             do i = 1 to n;
@@ -47,6 +46,7 @@ $include('const.lit')
 
             call prchr('|');
             call prcrlf;
+            n = freadbuf(f, .str, line$len);
         end;
 
         call prstr(.('EOF', 0dh, 0ah, 0));
