@@ -4,25 +4,20 @@ do;
 $include (cons.ext)
 $include (sys.ext)
 
+/* test to print command line arguments starting with the command */
 
     declare i word;
-    declare j word;
     declare argc word;
     declare pargv address;
-    declare argv based pargv address;
-    declare pstr address;
-    declare str based pstr address;
+    declare argv based pargv (*) address;
 
     call getargs(.argc, .pargv);
-    pstr = pargv;
     do i = 0 to argc - 1;
         call prhexbyte(byte(i));
         call prchr(':');
-        call prstr(str);
+        call prstr(argv(i));
         call prcrlf;
-        pstr = pstr + 2;
     end;
-
     call term;
 
 end;
