@@ -13,9 +13,9 @@ hello.exe: hello.plm wcl.lnk sys.obj cons.obj makefile
 run-hello: hello.exe .SYMBOLIC
 	@./dosexec hello
 
-dump.exe: dump.plm wcl.lnk sys.obj cons.obj makefile
+dump.exe: dump.plm wcl.lnk sys.obj cons.obj fio.obj makefile
 	./dosexec plm86 dump.plm code small xref symbols
-	wcl @wcl.lnk -zq -d2 -lr -bc -bcl=dos -fe=dump.exe dump.obj sys.obj cons.obj
+	wcl @wcl.lnk -zq -d2 -lr -bc -bcl=dos -fe=dump.exe dump.obj sys.obj cons.obj fio.obj
 
 run-dump: dump.exe .SYMBOLIC
 	@./doswin dump
