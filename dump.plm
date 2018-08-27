@@ -22,29 +22,34 @@ do;
 
 $include (cons.ext)
 $include (sys.ext)
+$include (fio.ext)
+$include (const.lit)
 
-    declare key word;
-    declare c byte;
-    declare f byte;
-    declare i word;
-    declare j word;
-    declare buf (255) byte;
     declare argc word;
     declare pargv address;
-    declare argv based pargv address;
-    declare pstr address;
-    declare str based pstr address;
+    declare argv based pargv (*) address;
+
+    declare f word;
 
     call getargs(.argc, .pargv);
-    call prcrlf;
-    pstr = pargv;
-    do i = 0 to argc - 1;
-        call prstr(str);
-        call prcrlf;
-        pstr = pstr + 2;
+    if argc <> 2 then
+    do;
+        call println(.('Usage: dump <filename>', 0));
+        goto exit;
+    end;
+    f = fopen(argv(1), true, false);
+    if f <> 0ffffh then
+    do;
+        call println(.('File open OK!', 0));
+        call fclose(f);
+    end;
+    else
+    do;
+        call println(.('File open error', 0));
+        goto exit;
     end;
 
-
+exit:
     call term;
 
 end;
