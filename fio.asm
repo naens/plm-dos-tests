@@ -374,5 +374,13 @@ feof:
 	ret	2
 
 fwritestr:
+
+;****f* fio/fseek
+;  NAME
+;    fseek -- seek in a file
+;  PARAMETERS
+;  RETURN VALUE
+;****
 fseek:
+
 ftrunc:

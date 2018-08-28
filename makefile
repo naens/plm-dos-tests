@@ -18,7 +18,7 @@ dump.exe: dump.plm wcl.lnk sys.obj cons.obj fio.obj makefile
 	wcl @wcl.lnk -zq -d2 -lr -bc -bcl=dos -fe=dump.exe dump.obj sys.obj cons.obj fio.obj
 
 run-dump: dump.exe .SYMBOLIC
-	@./doswin dump
+	@./doswin dump test.txt
 
 .asm.obj: dos.def
 	nasm -f obj $< -o $@ -l $^&.lst
