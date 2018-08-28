@@ -25,16 +25,16 @@ $include (sys.ext)
 $include (fio.ext)
 $include (const.lit)
 
-    declare argc word;
+    declare argc integer;
     declare pargv address;
     declare argv based pargv (*) address;
 
     declare line$len literally '16';
     declare line$num literally '16';
 
-    declare f word;
-    declare n word;
-    declare a word;
+    declare f integer;
+    declare n word;     /* number of butes read */
+    declare a word;     /* position in the file */
     declare buf(line$len) byte;
     declare key word;
 
@@ -43,10 +43,10 @@ $include (const.lit)
         declare pbuf address;
         declare buf based pbuf (*) byte;
         declare n word;
-        declare width word;
-        declare i word;
+        declare width integer;
+        declare i integer;
         do i = 0 to width - 1;
-            if i < n then
+            if i < integer(n) then
                 call prhexbyte(buf(i));
             else
                 call prstr(.('  ', 0));
@@ -61,8 +61,8 @@ $include (const.lit)
         declare pbuf address;
         declare buf based pbuf (*) byte;
         declare n word;
-        declare i word;
-        declare c byte;
+        declare i integer;
+        declare c word;
         call prchr('|');
         do i = 0 to n - 1;
             c = buf(i);
@@ -81,7 +81,7 @@ $include (const.lit)
         goto exit;
     end;
     f = fopen(argv(1), true, false);
-    if f <> 0ffffh then
+    if f <> -1 then
     do;
         call println(.('File open OK!', 0));
         n = freadbuf(f, .buf, line$len);

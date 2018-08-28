@@ -1,5 +1,5 @@
 global fopen, fclose, freadchr, freadbuf, feof, fwritechr, fwritebuf, \
-    fwritestr, fseek, ftrunc
+    fwritestr, fseekset, fseekcur, fseekend, ftrunc
 
 extern prchr, prstr, prcrlf, prhexbyte, prhexword, prstr, readkey, readln
 
@@ -48,7 +48,7 @@ bufloaded	resb 1		; boolean: buffer loaded or not
 ;  RETURN VALUE
 ;     * pfile on success: pointer to file data to use for other calls
 ;       returned in ax: not to be treated as a pointer
-;     * 0ffffh on error
+;     * -1 on error
 ;****
 
 	segment data
@@ -89,7 +89,7 @@ fopen:
 	mov	ax, fbuf	; return value: pfile
 	jmp	.end
 .error:
-	mov	ax, 0ffffh
+	mov	ax, -1
 
 .end:
 	pop	bp
@@ -228,7 +228,7 @@ freadchr:
 	mov	ax, 0
 	jmp	.end
 .error:
-	mov	ax, 0ffffh
+	mov	ax, -1
 .end:
 	pop	bp
 	ret	4
@@ -239,7 +239,7 @@ freadchr:
 ;    freadbuf -- read file into buffer
 ;  DESCRIPTION
 ;    Read sz bytes from file and store at location of address pbuf.  Returns
-;    the number of bytes read on success and 0ffffh on error.
+;    the number of bytes read on success and -1 on error.
 ;  PARAMETERS
 ;    pfile - pointer to the file data
 ;    pdest - pointer to the destination buffer
@@ -247,14 +247,14 @@ freadchr:
 ;  RETURN VALUE
 ;    On success returns the number of bytes read.  If an EOF condition
 ;    occurred during the file read, the return value might be smaller than
-;    sz.
+;    sz.  On error returns 0, as if couldn't reading anything.
 ;****
 ;  VAR
 ;    length - number a bytes to copy in the current loop iteration
 ;     count - bytes copied so far, at the end: the return value
 ;  PSEUDOCODE
 ;    if not readable then
-;        return -1
+;        return 0
 ;    count := 0
 ;    loop
 ;        let tmp1 = buflen - bufpos
@@ -280,7 +280,7 @@ freadbuf:
 	push	bp
 	mov	bp, sp
 
-	; if not readable then return 0ffffh
+	; if not readable then return -1
 	mov	ax, [openmode]
 	test	ax, 1
 	jz	.error
@@ -324,7 +324,7 @@ freadbuf:
 	jmp	.end
 
 .error:
-	mov	ax, 0ffffh
+	mov	ax, 0
 
 .end:
 	pop	bp
@@ -375,12 +375,54 @@ feof:
 
 fwritestr:
 
-;****f* fio/fseek
+;****f* fio/fseekset
 ;  NAME
-;    fseek -- seek in a file
+;    fseekset -- seek in a file
+;  DESCRIPTION
+;    Sets the position of the file to the value given in argument.  The
+;    seek functions can only be used if the file was opened in a
+;    readable mode (read-only or read/write).
 ;  PARAMETERS
+;    pfile - pointer to file data
+;    pos - position to set
 ;  RETURN VALUE
+;    Returns 0 on success and -1 on error
 ;****
-fseek:
+;  Pseudocode
+;    1. get the number of the block where the position is located
+;    2. get the position in the block
+;    3. read the block from the file
+;    4. set the position in the block
+;    !! cannot be used for write-only files
+fseekset:
+
+;****f* fio/fseekset
+;  NAME
+;    fseekset -- seek in a file
+;  DESCRIPTION
+;    Sets the position of the file by moving the current position by
+;    offset bytes.  The offset is a signed integer value, and it is
+;    possible forward and backwards.
+;  PARAMETERS
+;    pfile - pointer to file data
+;    offset - distance to move the pointer.  A positive value moves
+;             towards the end and a negative value moves backwards.
+;  RETURN VALUE
+;    Returns 0 on success and -1 on error
+;****
+fseekcur:
+
+;****f* fio/fseekset
+;  NAME
+;    fseekset -- seek in a file
+;  DESCRIPTION
+;    Sets the position in the file counting from the end of the file.
+;  PARAMETERS
+;    pfile - pointer to file data
+;    pos - position to set from the end of the file
+;  RETURN VALUE
+;    Returns 0 on success and -1 on error
+;****
+fseekend:
 
 ftrunc:

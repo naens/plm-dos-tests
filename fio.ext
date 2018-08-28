@@ -1,30 +1,45 @@
-fopen: procedure (pfname, readable, writable) word external;
+fopen: procedure (pfname, readable, writable) integer external;
     declare pfname address;
     declare readable byte;
     declare writable byte;
 end fopen;
 
 fclose: procedure (f) external;
-    declare f word;
+    declare f integer;
 end fclose;
 
-freadchr: procedure (f, pchr) word external;
-    declare f word;
+freadchr: procedure (f, pchr) integer external;
+    declare f integer;
     declare pchr address;
 end freadchr;
 
 freadbuf: procedure (f, pdest, sz) word external;
-    declare f word;
+    declare f integer;
     declare pdest address;
     declare sz word;
 end freadbuf;
 
-feof: procedure (f) word external;
-    declare f word;
+feof: procedure (f) integer external;
+    declare f integer;
 end feof;
 
 /* fwritechr */
 /* fwritebuf */
 /* fwritestr */
-/* fseek */
+
+fseekset: procedure (f, pos) integer external;
+    declare f integer;
+    declare pos word;
+end fseekset;
+
+fseekcur: procedure (f, offset) integer external;
+    declare f integer;
+    declare offset integer;
+end fseekcur;
+
+fseekend: procedure (f, pos) integer external;
+    declare f integer;
+    declare pos word;
+end fseekend;
+
 /* ftrunc */
