@@ -395,6 +395,63 @@ fwritestr:
 ;    4. set the position in the block
 ;    !! cannot be used for write-only files
 fseekset:
+	push	bp
+	mov	bp, sp	; => pfile=[bp+6], pos=[bp+4]
+
+	; curblk := block number: pos div bufsz, bufpos := pos mod bufsz
+	mov	dx, 0
+	mov	ax, [bp+4]
+	mov	cx, bufsz
+	mov	bx, ax		; save pos in bx
+	div	cx		; div in ax, mod in dx
+	sub	bx, dx
+	mov	dx, bx		; set dx to pos-(pos mod bufsz)
+
+	; set dos file pointer
+	mov	ah, seek
+	mov	al, 0		; seek from the beginning
+	mov	bx, [fhandle]
+	mov	cx, 0
+	int	dos		; dx already set
+	jc	.error
+
+	call	postseek
+	jc	.error
+
+	mov	ax, 0
+	jmp	.end
+
+.error:
+	mov	ax, -1
+
+.end:
+	pop	bp
+	ret	4
+
+; set buffer and variables after a successful seek operation
+postseek:
+	; set curblk and bufpos
+	mov	dx, 0
+	mov	cx, bufsz
+	div	cx
+	mov	[curblk], ax	; pos div bufsz
+	mov	[bufpos], dx	; pos mod bufsz
+	sub	bx, cx
+	mov	dx, bx		; set dx to pos-(pos mod bufsz)
+
+	; read buf
+	mov	ah, read
+	mov	bx, [fhandle]
+	mov	cx, bufsz
+	mov	dx, fbuf
+	int	dos
+	jc	.end
+	mov	[buflen], ax
+	mov	byte [bufmodified], 0
+
+.end:
+	ret
+
 
 ;****f* fio/fseekset
 ;  NAME
