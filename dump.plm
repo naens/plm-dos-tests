@@ -37,6 +37,7 @@ $include (const.lit)
     declare a word;     /* position in the file */
     declare buf(line$len) byte;
     declare key word;
+    declare scrsz word; /* number of bytes on one screen */
 
     /* prints n hex numbers separated by spaces, with padding to width */
     printhexline: procedure (pbuf, n, width);
@@ -86,17 +87,30 @@ $include (const.lit)
         call println(.('File open OK!', 0));
         n = freadbuf(f, .buf, line$len);
         a = 0;
+        scrsz = line$len * line$num;
         do while n > 0;
-            if a > 0 and a mod (line$len * line$num) = 0 then
+            if a > 0 and a mod scrsz = 0 then
             do;
                 call readkey(.key);
-                /* TODO: implement u=go one page up => seek */
+                if key = 'u' then
+                do;
+                    if a >= 2 * scrsz then
+                    do;
+                        if fseekset(f, a - 2 * scrsz) <> -1 then
+                        do;
+                            a = a - 2 * scrsz;
+                            n = freadbuf(f, .buf, line$len);
+                        end;
+                    end;
+                    else
+                        goto continue;
+                end;
                 /* TODO: g=go to address: read from kb
                  *       no prefix or b+value => absolute address
                  *       +/- prefix => relative address
                  *       e-value => relative to end
                  *       "e" = "e-0", "b" = "b+0" */
-                if key = 'q' then
+                else if key = 'q' then
                     goto close;
                 call prcrlf;
             end;
@@ -108,6 +122,7 @@ $include (const.lit)
             call prcrlf;
             a = a + n;
             n = freadbuf(f, .buf, line$len);
+continue:
         end;
         call prhexword(a);
         call prcrlf;
