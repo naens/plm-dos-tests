@@ -1,0 +1,21 @@
+.\" Source: ./fio.asm
+.\" Generated with ROBODoc Version 4\.99\.43 (Aug 19 2018)
+.\" ROBODoc (c) 1994\-2015 by Frans Slothouber and many others\.
+.TH freadbuf 3 "Aug 30, 2018" fio "fio Reference"
+
+.SH NAME
+\fBfreadbuf\fR \-\- read file into buffer
+
+.SH DESCRIPTION
+Read sz bytes from file and store at location of address pbuf\.  Returns
+the number of bytes read on success and \-1 on error\.
+
+.SH PARAMETERS
+pfile \- pointer to the file data
+pdest \- pointer to the destination buffer
+sz \- number of bytes that can be stored in the destination buffer
+
+.SH RETURN VALUE
+On success returns the number of bytes read\.  If an EOF condition
+occurred during the file read, the return value might be smaller than
+sz\.  On error returns 0, as if couldn't reading anything\.

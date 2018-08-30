@@ -27,8 +27,16 @@
 <ul>
 <li>1. <a href="#robo1">plm-exercises/fio</a></li>
 <ul>
-<li>1.1. <a href="#robo10">fio/fclose</a></li>
-<li>1.2. <a href="#robo11">fio/fopen</a></li>
+<li>1.1. <a href="#robo11">fio/fclose</a></li>
+<li>1.2. <a href="#robo12">fio/feof</a></li>
+<li>1.3. <a href="#robo13">fio/fgetsize</a></li>
+<li>1.4. <a href="#robo14">fio/fopen</a></li>
+<li>1.5. <a href="#robo15">fio/freadbuf</a></li>
+<li>1.6. <a href="#robo16">fio/freadchr</a></li>
+<li>1.7. <a href="#robo17">fio/fseekcur</a></li>
+<li>1.8. <a href="#robo18">fio/fseekend</a></li>
+<li>1.9. <a href="#robo19">fio/fseekset</a></li>
+<li>1.10. <a href="#robo20">fio/ftrunc</a></li>
 </ul>
 </ul>
 <hr />
@@ -48,7 +56,7 @@
 
 <hr />
 <a name="fio2ffclose"></a>
-<a name="robo10"></a><h2>fio/fclose [ Functions ]</h2>
+<a name="robo11"></a><h2>fio/fclose [ Functions ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo1">fio</a> ] [ <a href="./robo_functions.html#robo_top_of_doc">Functions</a> ]</p>
 <p class="item_name">NAME</p>
@@ -65,8 +73,47 @@
 </pre>
 
 <hr />
+<a name="fio2ffeof"></a>
+<a name="robo12"></a><h2>fio/feof [ Functions ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo1">fio</a> ] [ <a href="./robo_functions.html#robo_top_of_doc">Functions</a> ]</p>
+<p class="item_name">NAME</p>
+<pre>    <strong>feof</strong> -- check if at the end of file
+</pre>
+<p class="item_name">DESCRIPTION</p>
+<pre>    Check if the current position is at the end of file.  End of file means
+    that no more characters can be read.  The false value indicates that
+    there is at least one byte in the file that can be read at the current
+    position.
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre>    pfile - pointer to file data
+</pre>
+<p class="item_name">RETURN VALUE</p>
+<pre>    Boolean value telling whether the file position is at the end of file.
+</pre>
+
+<hr />
+<a name="fio2ffgetsize"></a>
+<a name="robo13"></a><h2>fio/fgetsize [ Functions ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo1">fio</a> ] [ <a href="./robo_functions.html#robo_top_of_doc">Functions</a> ]</p>
+<p class="item_name">NAME</p>
+<pre>    <strong>fgetsize</strong> -- get the size of the file
+  DESCRPTION
+    Returns the current size of the file.  The file should be open
+    in any mode.  In write mode data can be appended and file can be
+    truncated, which would change its size.
+  PARMETERS
+    pfile - pointer to file data
+</pre>
+<p class="item_name">RETURN VALUE</p>
+<pre>    Returns the size of the file.
+</pre>
+
+<hr />
 <a name="fio2ffopen"></a>
-<a name="robo11"></a><h2>fio/fopen [ Functions ]</h2>
+<a name="robo14"></a><h2>fio/fopen [ Functions ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo1">fio</a> ] [ <a href="./robo_functions.html#robo_top_of_doc">Functions</a> ]</p>
 <p class="item_name">NAME</p>
@@ -89,12 +136,137 @@
 <p class="item_name">RETURN VALUE</p>
 <pre>     * pfile on success: pointer to file data to use for other calls
        returned in ax: not to be treated as a pointer
-     * 0ffffh on error
+     * -1 on error
+</pre>
+
+<hr />
+<a name="fio2ffreadbuf"></a>
+<a name="robo15"></a><h2>fio/freadbuf [ Functions ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo1">fio</a> ] [ <a href="./robo_functions.html#robo_top_of_doc">Functions</a> ]</p>
+<p class="item_name">NAME</p>
+<pre>    <strong>freadbuf</strong> -- read file into buffer
+</pre>
+<p class="item_name">DESCRIPTION</p>
+<pre>    Read sz bytes from file and store at location of address pbuf.  Returns
+    the number of bytes read on success and -1 on error.
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre>    pfile - pointer to the file data
+    pdest - pointer to the destination buffer
+    sz - number of bytes that can be stored in the destination buffer
+</pre>
+<p class="item_name">RETURN VALUE</p>
+<pre>    On success returns the number of bytes read.  If an EOF condition
+    occurred during the file read, the return value might be smaller than
+    sz.  On error returns 0, as if couldn't reading anything.
+</pre>
+
+<hr />
+<a name="fio2ffreadchr"></a>
+<a name="robo16"></a><h2>fio/freadchr [ Functions ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo1">fio</a> ] [ <a href="./robo_functions.html#robo_top_of_doc">Functions</a> ]</p>
+<p class="item_name">NAME</p>
+<pre>    <strong>freadchr</strong> -- read a character from a file
+</pre>
+<p class="item_name">DESCRIPTION</p>
+<pre>    Reads a character from a file that has been opened previously in
+    read-only or read/write mode.
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre>    pfile - pointer to file data
+    pchar - pointer to the character to set
+</pre>
+<p class="item_name">RETURN VALUE</p>
+<pre>    0 on success
+    -1 on error
+</pre>
+
+<hr />
+<a name="fio2ffseekcur"></a>
+<a name="robo17"></a><h2>fio/fseekcur [ Functions ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo1">fio</a> ] [ <a href="./robo_functions.html#robo_top_of_doc">Functions</a> ]</p>
+<p class="item_name">NAME</p>
+<pre>    <strong>fseekcur</strong> -- seek in a file from the current position
+</pre>
+<p class="item_name">DESCRIPTION</p>
+<pre>    Sets the position of the file by moving the current position by
+    offset bytes.  The offset is a signed integer value, and it is
+    possible forward and backwards.
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre>    pfile - pointer to file data
+    offset - distance to move the pointer.  A positive value moves
+             towards the end and a negative value moves backwards.
+</pre>
+<p class="item_name">RETURN VALUE</p>
+<pre>    Returns 0 on success and -1 on error
+</pre>
+
+<hr />
+<a name="fio2ffseekend"></a>
+<a name="robo18"></a><h2>fio/fseekend [ Functions ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo1">fio</a> ] [ <a href="./robo_functions.html#robo_top_of_doc">Functions</a> ]</p>
+<p class="item_name">NAME</p>
+<pre>    <strong>fseekend</strong> -- seek in a file from the end
+</pre>
+<p class="item_name">DESCRIPTION</p>
+<pre>    Sets the position in the file counting from the end of the file.
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre>    pfile - pointer to file data
+    pos - position to set from the end of the file
+</pre>
+<p class="item_name">RETURN VALUE</p>
+<pre>    Returns 0 on success and -1 on error
+</pre>
+
+<hr />
+<a name="fio2ffseekset"></a>
+<a name="robo19"></a><h2>fio/fseekset [ Functions ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo1">fio</a> ] [ <a href="./robo_functions.html#robo_top_of_doc">Functions</a> ]</p>
+<p class="item_name">NAME</p>
+<pre>    <strong>fseekset</strong> -- seek in a file
+</pre>
+<p class="item_name">DESCRIPTION</p>
+<pre>    Sets the position of the file to the value given in argument.  The
+    seek functions can only be used if the file was opened in a
+    readable mode (read-only or read/write).
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre>    pfile - pointer to file data
+    pos - position to set
+</pre>
+<p class="item_name">RETURN VALUE</p>
+<pre>    Returns 0 on success and -1 on error
+</pre>
+
+<hr />
+<a name="fio2fftrunc"></a>
+<a name="robo20"></a><h2>fio/ftrunc [ Functions ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo1">fio</a> ] [ <a href="./robo_functions.html#robo_top_of_doc">Functions</a> ]</p>
+<p class="item_name">NAME</p>
+<pre>    <strong>ftrunc</strong> -- truncate the file
+</pre>
+<p class="item_name">DESCRIPTION</p>
+<pre>    Truncates the file at the current position.  The file should be in
+    opened writable mode.
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre>    pfile - pointer to file data
+</pre>
+<p class="item_name">RETURN VALUE</p>
+<pre>    Returns 0 on success and -1 on error.
 </pre>
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./fio.asm with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sat Aug 25 2018 16:10:19
+<p>Generated from ./fio.asm with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Thu Aug 30 2018 21:23:14
 </p>
 </div> <!-- footer -->
 </body>

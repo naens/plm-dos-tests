@@ -1,0 +1,16 @@
+.\" Source: ./fio.asm
+.\" Generated with ROBODoc Version 4\.99\.43 (Aug 19 2018)
+.\" ROBODoc (c) 1994\-2015 by Frans Slothouber and many others\.
+.TH fgetsize 3 "Aug 30, 2018" fio "fio Reference"
+
+.SH NAME
+\fBfgetsize\fR \-\- get the size of the file
+DESCRPTION
+Returns the current size of the file\.  The file should be open
+in any mode\.  In write mode data can be appended and file can be
+truncated, which would change its size\.
+PARMETERS
+pfile \- pointer to file data
+
+.SH RETURN VALUE
+Returns the size of the file\.

@@ -1,0 +1,20 @@
+.\" Source: ./fio.asm
+.\" Generated with ROBODoc Version 4\.99\.43 (Aug 19 2018)
+.\" ROBODoc (c) 1994\-2015 by Frans Slothouber and many others\.
+.TH fseekcur 3 "Aug 30, 2018" fio "fio Reference"
+
+.SH NAME
+\fBfseekcur\fR \-\- seek in a file from the current position
+
+.SH DESCRIPTION
+Sets the position of the file by moving the current position by
+offset bytes\.  The offset is a signed integer value, and it is
+possible forward and backwards\.
+
+.SH PARAMETERS
+pfile \- pointer to file data
+offset \- distance to move the pointer\.  A positive value moves
+towards the end and a negative value moves backwards\.
+
+.SH RETURN VALUE
+Returns 0 on success and \-1 on error

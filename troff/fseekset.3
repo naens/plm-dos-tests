@@ -1,0 +1,19 @@
+.\" Source: ./fio.asm
+.\" Generated with ROBODoc Version 4\.99\.43 (Aug 19 2018)
+.\" ROBODoc (c) 1994\-2015 by Frans Slothouber and many others\.
+.TH fseekset 3 "Aug 30, 2018" fio "fio Reference"
+
+.SH NAME
+\fBfseekset\fR \-\- seek in a file
+
+.SH DESCRIPTION
+Sets the position of the file to the value given in argument\.  The
+seek functions can only be used if the file was opened in a
+readable mode (read\-only or read/write)\.
+
+.SH PARAMETERS
+pfile \- pointer to file data
+pos \- position to set
+
+.SH RETURN VALUE
+Returns 0 on success and \-1 on error

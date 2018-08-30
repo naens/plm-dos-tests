@@ -1,0 +1,19 @@
+.\" Source: ./fio.asm
+.\" Generated with ROBODoc Version 4\.99\.43 (Aug 19 2018)
+.\" ROBODoc (c) 1994\-2015 by Frans Slothouber and many others\.
+.TH feof 3 "Aug 30, 2018" fio "fio Reference"
+
+.SH NAME
+\fBfeof\fR \-\- check if at the end of file
+
+.SH DESCRIPTION
+Check if the current position is at the end of file\.  End of file means
+that no more characters can be read\.  The false value indicates that
+there is at least one byte in the file that can be read at the current
+position\.
+
+.SH PARAMETERS
+pfile \- pointer to file data
+
+.SH RETURN VALUE
+Boolean value telling whether the file position is at the end of file\.
