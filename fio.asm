@@ -20,13 +20,13 @@ bufsz		equ	128	; the size of the buffer and of the block
 
 	segment	data	class=data
 fbuf		resb bufsz	; buffer for read and write
+fsize		resw 1		; the size of the file
 fhandle		resw 1		; dos file handle
 curblk		resw 1		; number of the current block
 bufpos		resw 1		; the position in the buffer
 buflen		resw 1		; if last block, number of bytes remaining
 openmode	resb 1		; 2 bits: open mode: 01:r, 10:w, 11:rw (bits: rw)
 bufmodified	resb 1		; boolean: buffer modified or not
-bufloaded	resb 1		; boolean: buffer loaded or not
 
 	segment code	class=code
 
@@ -74,6 +74,22 @@ fopen:
 	test	byte [openmode], 1
 	jz	.nold
 
+	; get file size
+	mov	ah, seek
+	mov	al, 2		; seek from the end
+	mov	bx, [fhandle]
+	mov	cx, 0
+	mov	dx, 0
+	int	dos		; dx already set
+	jc	.error
+	test	dx, dx
+	jnz	.error		; file to big
+	mov	[fsize], ax
+	mov	ah, seek
+	mov	al, 0		; seek from the beginning
+	int	dos		; go back to the beginning
+	jc	.error
+
 	; load first block
 	call	rdfstblk
 	jc	.error
@@ -82,7 +98,6 @@ fopen:
 	mov	word [curblk], 0
 	mov	word [bufpos], 0
 	mov	byte [bufmodified], 0
-	mov	byte [bufloaded], 0
 
 .endld:
 
@@ -109,7 +124,6 @@ rdfstblk:
 	mov	word [bufpos], 0
 	mov	word [curblk], 0
 	mov	byte [bufmodified], 0
-	mov	byte [bufloaded], 1
 .error:
 	ret
 	
@@ -398,14 +412,24 @@ fseekset:
 	push	bp
 	mov	bp, sp	; => pfile=[bp+6], pos=[bp+4]
 
+	mov	ax, [openmode]
+	test	ax, 1
+	jz	.error
+
 	; curblk := block number: pos div bufsz, bufpos := pos mod bufsz
 	mov	dx, 0
 	mov	ax, [bp+4]
 	mov	cx, bufsz
 	mov	bx, ax		; save pos in bx
-	div	cx		; div in ax, mod in dx
-	sub	bx, dx
-	mov	dx, bx		; set dx to pos-(pos mod bufsz)
+	div	cx		; div in ax=newblk, mod in dx=newbpos
+	mov	[bufpos], dx	; set bufpos
+
+	cmp	ax, [curblk]
+	je	.success
+
+	; different blocks => seek	
+	sub	bx, dx		; bx=newpos, dx=newbpos => bx: new block start
+	mov	dx, bx		; set dx(=bx) to new block start pos
 
 	; set dos file pointer
 	mov	ah, seek
@@ -418,6 +442,7 @@ fseekset:
 	call	postseek
 	jc	.error
 
+.success:
 	mov	ax, 0
 	jmp	.end
 
@@ -430,7 +455,7 @@ fseekset:
 
 ; set buffer and variables after a successful seek operation
 postseek:
-	; set curblk and bufpos
+	; set curblk and bufpos, curpos in ax
 	mov	dx, 0
 	mov	cx, bufsz
 	div	cx
@@ -468,6 +493,70 @@ postseek:
 ;    Returns 0 on success and -1 on error
 ;****
 fseekcur:
+	push	bp
+	mov	bp, sp	; => pfile=[bp+6], offset=[bp+4]
+
+	; test that the file is readable
+	mov	ax, [openmode]
+	test	ax, 1
+	jz	.error
+
+	mov	ax, bufsz
+	mov	cx, [curblk]
+	mul	cx
+	add	ax, [bufpos]	; curpos = bufsz * curblk + bufpos
+	mov	cx, ax		; curpos in cx
+	add	ax, [bp+4]	; newpos in ax
+	mov	cx, ax		; save newpos in cx
+	mov	bx, bufsz	; bufsz in bx
+	div	bx		; div=newblk in ax, mod=newbpos in dx
+	mov	[bufpos], dx	; set bufpos
+	cmp	ax, [curblk]
+	je	.success	; done if it's the same block
+	jb	.negative
+
+	; offset > 0
+	sub	ax, [curblk]	; ax = newblk - curblk
+	mov	bx, bufsz
+	mul	bx
+	mov	dx, ax		; dx = bufsz * (newblk - curblk)
+
+	mov	ah, seek
+	mov	al, 1		; seek from current
+	mov	bx, [fhandle]
+	mov	cx, 0
+	int	dos		; dx already set
+	jc	.error
+
+	jmp	.postseek
+
+	; offset < 0
+.negative:
+	sub	cx, dx
+	mov	dx, cx		; new beginning of block in dx
+
+	mov	ah, seek
+	mov	al, 0		; seek from the beginning
+	mov	bx, [fhandle]
+	mov	cx, 0
+	int	dos		; dx already set
+	jc	.error
+
+.postseek:
+	call	postseek
+	jc	.error
+
+.success:
+	mov	ax, 0
+	jmp	.end
+
+.error:
+	mov	ax, -1
+
+.end:
+	pop	bp
+	ret	4
+
 
 ;****f* fio/fseekset
 ;  NAME
@@ -480,6 +569,61 @@ fseekcur:
 ;  RETURN VALUE
 ;    Returns 0 on success and -1 on error
 ;****
+;  dos seek end pos => newpos
+;  newblk = newpos div bufsz
+;  newbpos = newpos mod bufsz
+;  if newbpos <> 0 then
+;    dos seek set newpos - newbpos
+;  if newblk = curblk then
+;    bufpos := newbpos
+;  else
+;    postseek
 fseekend:
+	push	bp
+	mov	bp, sp	; => pfile=[bp+6], pos=[bp+4]
+
+	; dos seek end pos => newpos
+	mov	ah, seek
+	mov	al, 2		; seek from end
+	mov	bx, [fhandle]
+	mov	cx, 0
+	mov	dx, [bp+4]
+	int	dos
+	jc	.error
+
+	; newblk = newpos div bufsz, newbpos = newpos mod bufsz
+	mov	dx, 0
+	mov	cx, bufsz
+	div	cx		; ax=div, dx=mod
+
+	; if newbpos <> 0 then dos seek set newpos - newbpos
+	cmp	dx, 0
+	je	.skipseek
+	sub	bx, cx
+	mov	dx, bx		; set dx to pos-(pos mod bufsz)
+	mov	ah, seek
+	mov	al, 0		; seek set
+	mov	bx, [fhandle]
+	mov	cx, 0
+	int	dos		; dx already set
+	jc	.error
+	mov	dx, 0
+	mov	cx, bufsz
+	div	cx		; ax=div, dx=mod
+.skipseek:
+
+	; if newblk = curblk then
+	; bufpos := newbpos
+	; else postseek
+
+	mov	ax, 0
+	jmp	.end
+
+.error:
+	mov	ax, -1
+
+.end:
+	pop	bp
+	ret	4
 
 ftrunc:
