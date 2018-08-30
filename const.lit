@@ -1,2 +1,2 @@
-declare true literally '1';
-declare false literally '0';
+declare true literally 'integer(-1)';
+declare false literally 'integer(0)';
