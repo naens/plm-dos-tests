@@ -1,5 +1,5 @@
 global fopen, fclose, freadchr, freadbuf, feof, fwritechr, fwritebuf, \
-    fwritestr, fseekset, fseekcur, fseekend, fgetsize, fsetsize
+    fwritestr, fseekset, fseekcur, fseekend, fgetsize, ftrunc
 
 extern prchr, prstr, prcrlf, prhexbyte, prhexword, prstr, readkey, readln
 
@@ -50,7 +50,6 @@ bufmodified	resb 1		; boolean: buffer modified or not
 ;       returned in ax: not to be treated as a pointer
 ;     * -1 on error
 ;****
-
 	segment data
 	segment code
 fopen:
@@ -63,15 +62,17 @@ fopen:
 	mov	bl, [bp+4]	; bl=w
 	shl	bl, 1		; bl=2*w
 	or	al, bl		; al=2*w+r
+	and	al, 3		; keep only 2 bits
 	mov	[openmode], al	; store open mode flags
 	dec	al		; convert to dos mode
 	int	dos
-	jc .error
+	jc	.error
 
 	mov	word [fhandle], ax
 
 	; skipping loading first block if file not readable (write-only)
-	test	byte [openmode], 1
+	mov	al, byte [openmode]
+	cmp	al, 2		; write-only
 	jz	.nold
 
 	; get file size
@@ -94,13 +95,12 @@ fopen:
 	call	rdfstblk
 	jc	.error
 	jmp	.endld
+
 .nold:
 	mov	word [curblk], 0
 	mov	word [bufpos], 0
 	mov	byte [bufmodified], 0
-
 .endld:
-
 	mov	ax, fbuf	; return value: pfile
 	jmp	.end
 .error:
@@ -109,6 +109,7 @@ fopen:
 .end:
 	pop	bp
 	ret	6
+
 
 ; subroutine: read first block (private)
 ; updates buffer and variables: buflen, bufpos, curblk, bufmodified
@@ -626,5 +627,66 @@ fseekend:
 	pop	bp
 	ret	4
 
+
+;****f* fio/fgetsize
+;  NAME
+;    fgetsize -- get the size of the file
+;  DESCRPTION
+;    Returns the current size of the file.  The file should be open
+;    in any mode.  In write mode data can be appended and file can be
+;    truncated, which would change its size.
+;  PARMETERS
+;    pfile - pointer to file data
+;  RETURN VALUE
+;    Returns the size of the file.
+;****
 fgetsize:
-fsetsize:
+	push	bp
+	mov	bp, sp
+	mov	ax, [fsize]
+	pop	bp
+	ret	2
+
+
+;****f* fio/ftrunc
+;  NAME
+;    ftrunc -- truncate the file
+;  DESCRIPTION
+;    Truncates the file at the current position.  The file should be in
+;    opened writable mode.
+;  PARAMETERS
+;    pfile - pointer to file data
+;  RETURN VALUE
+;    Returns 0 on success and -1 on error.
+;****
+ftrunc:
+	push	bp
+	mov	bp, sp
+
+	mov	al, [openmode]
+	test	al, 2
+	jz	.error
+
+	; calculate current position = new value for fsize
+	mov	ax, bufsz
+	mov	bx, [curblk]
+	mul	bx
+	add	bx, [bufpos]	; bx = bufsz * curblk + bufpos
+
+	; set file size to value in bx
+	mov	ah, write
+	mov	cx, 0		; bytes to write
+	mov	dx, 0		; buffer to write
+	int	dos
+	jc	.error
+
+	mov	[fsize], bx
+
+	mov	ax, 0
+	jmp	.end
+.error:
+	mov	ax, -1
+.end:
+	pop	bp
+	ret	2
+

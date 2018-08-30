@@ -1,7 +1,7 @@
 fopen: procedure (pfname, readable, writable) integer external;
     declare pfname address;
-    declare readable byte;
-    declare writable byte;
+    declare readable integer;
+    declare writable integer;
 end fopen;
 
 fclose: procedure (f) external;
@@ -42,11 +42,10 @@ fseekend: procedure (f, pos) integer external;
     declare pos word;
 end fseekend;
 
-fgetsize: procedure (f, pszie) integer external;
+fgetsize: procedure (f) word external;
     declare f integer;
-    declare psize address;
 end fgetsize;
 
-fsetsize: procedure (f, size) integer external;
-    declare size word;
-end fsetsize;
+ftrunc: procedure (f) integer external;
+    declare f integer;
+end ftrunc;
