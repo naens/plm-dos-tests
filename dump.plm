@@ -85,6 +85,8 @@ $include (const.lit)
     if f <> -1 then
     do;
         call println(.('File open OK!', 0));
+        call prhexword(fgetsize(f));
+        call prcrlf;
         n = freadbuf(f, .buf, line$len);
         a = 0;
         scrsz = line$len * line$num;
