@@ -42,4 +42,11 @@ fseekend: procedure (f, pos) integer external;
     declare pos word;
 end fseekend;
 
-/* ftrunc */
+fgetsize: procedure (f, pszie) integer external;
+    declare f integer;
+    declare psize address;
+end fgetsize;
+
+fsetsize: procedure (f, size) integer external;
+    declare size word;
+end fsetsize;

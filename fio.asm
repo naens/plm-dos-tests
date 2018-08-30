@@ -1,5 +1,5 @@
 global fopen, fclose, freadchr, freadbuf, feof, fwritechr, fwritebuf, \
-    fwritestr, fseekset, fseekcur, fseekend, ftrunc
+    fwritestr, fseekset, fseekcur, fseekend, fgetsize, fsetsize
 
 extern prchr, prstr, prcrlf, prhexbyte, prhexword, prstr, readkey, readln
 
@@ -626,4 +626,5 @@ fseekend:
 	pop	bp
 	ret	4
 
-ftrunc:
+fgetsize:
+fsetsize:
