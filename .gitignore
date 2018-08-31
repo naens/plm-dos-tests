@@ -7,4 +7,5 @@
 *.sym
 *.exe
 *.lib
+*.inc
 test.txt
