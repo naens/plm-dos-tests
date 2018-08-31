@@ -6,16 +6,16 @@ all: hello.exe dump.exe
 run: .SYMBOLIC
 	@./doswin
 
-hello.exe: hello.plm wcl.lnk sys.obj cons.obj makefile
+hello.exe: hello.plm wcl.lnk sys.obj cons.obj str.obj makefile
 	./dosexec plm86 hello.plm code small xref symbols
-	wcl @wcl.lnk -zq -d2 -lr -bc -bcl=dos -fe=hello.exe hello.obj sys.obj cons.obj
+	wcl @wcl.lnk -zq -d2 -lr -bc -bcl=dos -fe=hello.exe hello.obj sys.obj cons.obj str.obj
 
 run-hello: hello.exe .SYMBOLIC
 	@./dosexec hello
 
 dump.exe: dump.plm wcl.lnk sys.obj cons.obj fio.obj makefile
 	./dosexec plm86 dump.plm code small xref symbols
-	wcl @wcl.lnk -zq -d2 -lr -bc -bcl=dos -fe=dump.exe dump.obj sys.obj cons.obj fio.obj
+	wcl @wcl.lnk -zq -d2 -lr -bc -bcl=dos -fe=dump.exe dump.obj sys.obj cons.obj fio.obj str.obj
 
 run-dump: dump.exe .SYMBOLIC
 	@./doswin dump test.txt
@@ -33,5 +33,5 @@ docs: .SYMBOLIC
 troff: .SYMBOLIC
 	robodoc --src . --doc ./troff --troff --multidoc --sections --tell
 
-tests: sys.obj cons.obj fio.obj .SYMBOLIC
+tests: sys.obj cons.obj fio.obj str.obj .SYMBOLIC
 	./buildtests

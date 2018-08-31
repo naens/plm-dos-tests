@@ -1,0 +1,27 @@
+strcmp: procedure (pstr1, pstr2) boolean external;
+    declare pstr1 address, pstr2 address;
+end strcmp;
+
+strlen: procedure (pstr) integer external;
+    declare pstr address;
+end strlen;
+
+xstr2int: procedure (pstr) integer external;
+    declare pstr address;
+end xstr2int;
+
+dstr2int: procedure (pstr) integer external;
+    declare pstr address;
+end dstr2int;
+
+int2xstr: procedure (n, pbuf, buflen) word external;
+    declare n integer;
+    declare pbuf address;
+    declare buflen word;
+end int2xstr;
+
+int2dstr: procedure (n, pbuf, buflen) word external;
+    declare n integer;
+    declare pbuf address;
+    declare buflen word;
+end int2dstr;
