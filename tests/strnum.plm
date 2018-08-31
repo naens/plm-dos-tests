@@ -1,0 +1,25 @@
+strnum:
+do;
+
+$include('const.lit')
+$include('sys.ext')
+$include('cons.ext')
+$include('str.ext')
+
+    declare buf (128) byte;
+    declare w word;
+
+    call readln(.buf, 255);
+
+    call prstr(.('string is ', 0));
+    call println(.buf);
+
+    w = xstr2word(.buf);
+
+    call prstr(.('word is ', 0));
+    call prhexword(w);
+    call prcrlf;
+
+    call term;
+
+end strnum;
