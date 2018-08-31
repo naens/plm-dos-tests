@@ -17,6 +17,7 @@ test_build()
     local dir=$1
     local name=$2
     local fn=$dir/$name
+    echo $'\n'$'\n'COMPILING $fn
 	./dosexec plm86 $fn.plm code small xref symbols
     lcfiles "$(find $dir | grep -i $name | grep '[A-Z]')"
 

@@ -19,7 +19,7 @@ freadbuf: procedure (f, pdest, sz) word external;
     declare sz word;
 end freadbuf;
 
-feof: procedure (f) integer external;
+feof: procedure (f) boolean external;
     declare f integer;
 end feof;
 
