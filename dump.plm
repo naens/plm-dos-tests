@@ -38,6 +38,7 @@ $include (const.lit)
     declare buf(line$len) byte;
     declare key word;
     declare scrsz word; /* number of bytes on one screen */
+    declare numlen word;
 
     /* prints n hex numbers separated by spaces, with padding to width */
     printhexline: procedure (pbuf, n, width);
@@ -75,6 +76,33 @@ $include (const.lit)
         call prchr('|');
     end printcharline;
 
+    goset: procedure (f, curpos, pos) word;
+        declare f integer;
+        declare curpos word;
+        declare pos word;
+        if fseekset(f, pos) = -1 then
+            return curpos;
+        return pos;
+    end goset;
+
+    gocur: procedure (f, curpos, offset) word;
+        declare f integer;
+        declare curpos word;
+        declare offset integer;
+        if fseekcur(f, offset) = -1 then
+            return curpos;
+        return curpos + word(offset);
+    end gocur;
+
+    goend: procedure (f, curpos, pos) word;
+        declare f integer;
+        declare curpos word;
+        declare pos word;
+        if fseekend(f, pos) = -1 then
+            return curpos;
+        return pos;
+    end goend;
+
     call getargs(.argc, .pargv);
     if argc <> 2 then
     do;
@@ -106,6 +134,32 @@ $include (const.lit)
                     end;
                     else
                         goto continue;
+                end;
+                if key = 'g' then   /* read from address from keyboard */
+                do;
+                    numlen = freadbuf(f, .buf, line$len - 1);
+                    buf(numlen) = 0;
+                    if buf(0) = '+' then
+                    do;
+                        a = gocur(f, a, str2hex(.buf(1)));
+                    end;
+                    else if buf(0) = '-' then
+                    do;
+                        a = gocur(f, a, str2hex(.buf(1)));
+                    end;
+                    else if buf(0) = 'e' and buf(1) = '-' then
+                    do;
+                        a = goend(f, a, str2hex(.buf(2)));
+                    end;
+                    else if buf(0) = 'b' and buf(1) = '+' then
+                    do;
+                        a = goset(f, a, str2hex(.buf(2)));
+                    end;
+                    else
+                    do;
+                        a = goset(f, a, str2hex(.buf(0)));
+                    end;
+                    n = freadbuf(f, .buf, line$len);
                 end;
                 /* TODO: g=go to address: read from kb
                  *       no prefix or b+value => absolute address
