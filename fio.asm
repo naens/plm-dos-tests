@@ -1,7 +1,7 @@
 global fopen, fclose, freadchr, freadbuf, feof, fwritechr, fwritebuf, \
     fwritestr, fseekset, fseekcur, fseekend, fgetsize, ftrunc
 
-extern prchr, prstr, prcrlf, prhexbyte, prhexword, prstr, readkey, readln
+%include "cons.inc"
 
 ;****h* plm-exercises/fio
 ;  NAME

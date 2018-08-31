@@ -20,6 +20,8 @@ dump.exe: dump.plm wcl.lnk sys.obj cons.obj fio.obj makefile
 run-dump: dump.exe .SYMBOLIC
 	@./doswin dump test.txt
 
+# TODO: add inc files generation rule
+
 .asm.obj: dos.def
 	nasm -f obj $< -o $@ -l $^&.lst
 

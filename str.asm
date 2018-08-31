@@ -1,6 +1,6 @@
 global strcmp, strlen, xstr2int, dstr2int, int2xstr, int2dstr
 
-extern prchr, prstr, prcrlf, prhexbyte, prhexword, prstr, readkey, readln
+%include "cons.inc"
 
 ;****h* plm-exercises/str
 ;  NAME
