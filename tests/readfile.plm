@@ -1,19 +1,19 @@
 readfile:
 do;
 
+$include('const.lit')
 $include('sys.ext')
 $include('cons.ext')
 $include('fio.ext')
-$include('const.lit')
 
-    declare f word;
+    declare f integer;
     declare c byte;
     declare tmp word;
 
     call prstr(.('Opening the file...', 0dh, 0ah, 0));
 
     f = fopen(.('test2.txt', 0), true, false);
-    if f <> 0ffffh then
+    if f <> -1 then
     do;
         call prstr(.('File open OK!', 0dh, 0ah, 0));
         tmp = 0;
