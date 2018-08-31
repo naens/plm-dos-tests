@@ -1,7 +1,7 @@
 fopen: procedure (pfname, readable, writable) integer external;
     declare pfname address;
-    declare readable integer;
-    declare writable integer;
+    declare readable boolean;
+    declare writable boolean;
 end fopen;
 
 fclose: procedure (f) external;

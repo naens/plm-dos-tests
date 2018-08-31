@@ -1,2 +1,3 @@
 declare true literally 'integer(-1)';
 declare false literally 'integer(0)';
+declare boolean literally 'integer';
