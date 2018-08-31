@@ -6,9 +6,9 @@ strlen: procedure (pstr) integer external;
     declare pstr address;
 end strlen;
 
-xstr2int: procedure (pstr) integer external;
+xstr2word: procedure (pstr) word external;
     declare pstr address;
-end xstr2int;
+end xstr2word;
 
 dstr2int: procedure (pstr) integer external;
     declare pstr address;
