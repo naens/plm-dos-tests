@@ -20,10 +20,11 @@
 dump:
 do;
 
+$include (const.lit)
 $include (cons.ext)
 $include (sys.ext)
 $include (fio.ext)
-$include (const.lit)
+$include (str.ext)
 
     declare argc integer;
     declare pargv address;
@@ -139,25 +140,21 @@ $include (const.lit)
                 do;
                     numlen = freadbuf(f, .buf, line$len - 1);
                     buf(numlen) = 0;
-                    if buf(0) = '+' then
+                    if buf(0) = '+' or buf(0) = '-' then
                     do;
-                        a = gocur(f, a, str2hex(.buf(1)));
-                    end;
-                    else if buf(0) = '-' then
-                    do;
-                        a = gocur(f, a, str2hex(.buf(1)));
+                        a = gocur(f, a, xstr2int(.buf));
                     end;
                     else if buf(0) = 'e' and buf(1) = '-' then
                     do;
-                        a = goend(f, a, str2hex(.buf(2)));
+                        a = goend(f, a, word(xstr2int(.buf(2))));
                     end;
                     else if buf(0) = 'b' and buf(1) = '+' then
                     do;
-                        a = goset(f, a, str2hex(.buf(2)));
+                        a = goset(f, a, word(xstr2int(.buf(2))));
                     end;
                     else
                     do;
-                        a = goset(f, a, str2hex(.buf(0)));
+                        a = goset(f, a, word(xstr2int(.buf(0))));
                     end;
                     n = freadbuf(f, .buf, line$len);
                 end;
