@@ -140,21 +140,25 @@ $include (str.ext)
                 do;
                     numlen = freadbuf(f, .buf, line$len - 1);
                     buf(numlen) = 0;
-                    if buf(0) = '+' or buf(0) = '-' then
+                    if buf(0) = '+' then
                     do;
-                        a = gocur(f, a, xstr2int(.buf));
+                        a = gocur(f, a, integer(xstr2word(.buf)));
+                    end;
+                    else if buf(0) = '-' then
+                    do;
+                        a = gocur(f, a, -integer(xstr2word(.buf)));
                     end;
                     else if buf(0) = 'e' and buf(1) = '-' then
                     do;
-                        a = goend(f, a, word(xstr2int(.buf(2))));
+                        a = goend(f, a, xstr2word(.buf(2)));
                     end;
                     else if buf(0) = 'b' and buf(1) = '+' then
                     do;
-                        a = goset(f, a, word(xstr2int(.buf(2))));
+                        a = goset(f, a, xstr2word(.buf(2)));
                     end;
                     else
                     do;
-                        a = goset(f, a, word(xstr2int(.buf(0))));
+                        a = goset(f, a, xstr2word(.buf(0)));
                     end;
                     n = freadbuf(f, .buf, line$len);
                 end;
