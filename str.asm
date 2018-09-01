@@ -13,11 +13,76 @@ global strcmp, strlen, xstr2word, dstr2int, int2xstr, int2dstr
 
 %include "dos.def"
 
-; compare two zero-terminated strings
+;****f* plm-exercises/strcmp
+;  NAME
+;    strcmp -- compare two strings
+;  DESCRIPTION
+;    Returns a boolean value telling whether two strings are equal.  String
+;    can be of length zero.
+;  PARAMETERS
+;    pstr1 - first string
+;    pstr2 = second string
+;  RETURN VALUE
+;    Returns a boolean true if strings are equal and false otherwise.
+;****
 strcmp:
+	push	bp
+	mov	bp, sp
 
-; length of a zero-terminated string
+	mov	si, [bp+6]
+	mov	di, [bp+4]
+
+.l:
+	mov	al, [si]
+	cmp	al, [di]
+	jne	.f		; if different then return false
+	test	al, al
+	jz	.t		; if both at end then return true
+	inc	si
+	inc	di
+	jmp	.l
+
+.f:
+	mov	ax, 0
+	jmp	.e
+
+.t:
+	mov	ax, -1
+
+.e:
+	pop	bp
+	ret	4
+
+
+;****f* plm-exercises/strlen
+;  NAME
+;    strlen -- get the length of a string
+;  DESCRIPTION
+;    Returns the number of characters in a null-terminated string before the
+;    null character.
+;  PARAMETERS
+;    pstr - string
+;  RETURN VALUE
+;    Returns the length of the string.
+;****
 strlen:
+	push	bp
+	mov	bp, sp
+
+	mov	bx, [bp+4]
+	mov	ax, 0
+
+.l:
+	mov	cl, [bx]
+	cmp	cl, 0
+	jz	.e
+	inc	ax
+	inc	bx
+	jmp	.l
+
+.e:
+	pop	bp
+	ret	2
 
 ;****f* str/xstr2word
 ;  NAME
