@@ -17,13 +17,14 @@ global strcmp, strlen, xstr2word, dstr2int, int2xstr, int2dstr
 ;  NAME
 ;    strcmp -- compare two strings
 ;  DESCRIPTION
-;    Returns a boolean value telling whether two strings are equal.  String
-;    can be of length zero.
+;    Compares two strings and returns 0 if they are equal, -1 or 1 if the
+;    first string is before or after in code-point order.
 ;  PARAMETERS
 ;    pstr1 - first string
 ;    pstr2 = second string
 ;  RETURN VALUE
-;    Returns a boolean true if strings are equal and false otherwise.
+;    Returns an integer telling if the first string is before, equal or
+;    after in code-point ordering the second string.
 ;****
 strcmp:
 	push	bp
@@ -35,19 +36,25 @@ strcmp:
 .l:
 	mov	al, [si]
 	cmp	al, [di]
-	jne	.f		; if different then return false
+	jb	.b		; if different then return false
+	ja	.a
 	test	al, al
-	jz	.t		; if both at end then return true
+	jz	.eq		; if both at end then return true
 	inc	si
 	inc	di
 	jmp	.l
 
-.f:
-	mov	ax, 0
+.b:
+	mov	ax, -1
 	jmp	.e
 
-.t:
-	mov	ax, -1
+.a:
+	mov	ax, 1
+	jmp	.e
+
+.eq:
+	mov	ax, 0
+	jmp	.e
 
 .e:
 	pop	bp

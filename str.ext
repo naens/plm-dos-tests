@@ -1,4 +1,4 @@
-strcmp: procedure (pstr1, pstr2) boolean external;
+strcmp: procedure (pstr1, pstr2) integer external;
     declare pstr1 address, pstr2 address;
 end strcmp;
 
