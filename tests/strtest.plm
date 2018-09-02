@@ -1,0 +1,27 @@
+strtest:
+do;
+
+$include (const.lit)
+$include (cons.ext)
+$include (sys.ext)
+$include (str.ext)
+
+    declare str1 (128) byte;
+    declare str2 (128) byte;
+    declare result integer;
+
+    call prstr(.('Enter the first string: ', 0));
+    call readln(.str1, 128);
+    call prstr(.('Enter the second string: ', 0));
+    call readln(.str2, 128);
+    result = strcmp(.str1, .str2);
+    if result = -1 then
+        call println(.('The first string is lower', 0));
+    else if result = 1 then
+        call println(.('The second string is lower', 0));
+    else
+        call println(.('The strings are equal', 0));
+
+    call term;
+end;
+    
