@@ -1,0 +1,19 @@
+strtest:
+do;
+
+$include (const.lit)
+$include (cons.ext)
+$include (sys.ext)
+$include (str.ext)
+
+    declare str (128) byte;
+    declare length word;
+
+    call prstr(.('Enter string: ', 0));
+    call readln(.str, 128);
+    length = strlen(.str);
+    call prstr(.('The length of the string is ', 0));
+    call prhexword(length);
+
+    call term;
+end;
