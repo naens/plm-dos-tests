@@ -36,10 +36,13 @@ $include (str.ext)
     declare f integer;
     declare n word;     /* number of butes read */
     declare a word;     /* position in the file */
+    declare pos word;
+    declare offset integer;
     declare buf(line$len) byte;
     declare key word;
     declare scrsz word; /* number of bytes on one screen */
     declare numlen word;
+
 
     /* prints n hex numbers separated by spaces, with padding to width */
     printhexline: procedure (pbuf, n, width);
@@ -59,6 +62,7 @@ $include (str.ext)
         end;
     end printhexline;
 
+
     /* prints n chars from buffer */
     printcharline: procedure (pbuf, n);
         declare pbuf address;
@@ -77,32 +81,68 @@ $include (str.ext)
         call prchr('|');
     end printcharline;
 
-    goset: procedure (f, curpos, pos) word;
-        declare f integer;
-        declare curpos word;
-        declare pos word;
-        if fseekset(f, pos) = -1 then
-            return curpos;
-        return pos;
-    end goset;
 
-    gocur: procedure (f, curpos, offset) word;
-        declare f integer;
-        declare curpos word;
-        declare offset integer;
-        if fseekcur(f, offset) = -1 then
-            return curpos;
-        return curpos + word(offset);
-    end gocur;
+    /* display single line from the buffer of the file being read */
+    display$line: procedure (addr, pbuf, len, nline);
+        declare addr word;
+        declare pbuf address;
+        declare len word;
+        declare nline word;
+        call prhexword(a);
+        call prstr(.('    ', 0));
+        call printhexline(.buf, n, line$len);
+        call prchr(' ');
+        call printcharline(.buf, n);
+        call prcrlf;
+    end display$line;
 
-    goend: procedure (f, curpos, pos) word;
+
+    /* read max len * num from file
+     * display in lines of len, print num lines
+     * return the number of bytes really printed
+     */
+    display$screen: procedure (f, addr, pbuf, len, num) word;
         declare f integer;
-        declare curpos word;
-        declare pos word;
-        if fseekend(f, pos) = -1 then
-            return curpos;
-        return pos;
-    end goend;
+        declare addr word;
+        declare pbuf address;
+        declare len word;
+        declare num word;
+        declare total word;
+        declare nline word;
+        declare i word;
+        total = 0;
+        i = 0;
+        do while i < len;
+            nline = freadbuf(f, pbuf, len);
+            call display$line(addr, pbuf, len, nline);
+            total = total + nline;
+            if nline < len then
+                goto endloop;
+            i = i + 1;
+        end;
+    endloop:
+        return total;
+    end display$screen;
+
+
+    /* dump utility: print hex file and navigate it
+     * Pseudocode:
+     *   open file
+     *   a=0
+     *   loop
+     *     c := read_and_display from file line$len*line$num
+     *     a = a + c
+     *     read command from keyboard
+     *     if command is 'q' then
+     *       exit from loop
+     *     else
+     *       if seek command then
+     *         read seek line
+     *         call parse_seek_and_go procedure    // with pos=a-c
+     *       <repeat loop>
+     *     end if
+     *   end loop
+     */
 
     call getargs(.argc, .pargv);
     if argc <> 2 then
@@ -138,28 +178,51 @@ $include (str.ext)
                 end;
                 if key = 'g' then   /* read from address from keyboard */
                 do;
-                    numlen = freadbuf(f, .buf, line$len - 1);
-                    buf(numlen) = 0;
+                    call prstr(.('a = ', 0));
+                    call prhexword(a);
+                    call prcrlf;
+                    call prstr(.('go: ', 0));
+                    call readln(.buf, line$len - 1);
+                    call prstr(.('going: ', 0));
+                    call println(.buf);
                     if buf(0) = '+' then
                     do;
-                        a = gocur(f, a, integer(xstr2word(.buf)));
+                        offset = integer(xstr2word(.buf(1)));
+                        if fseekcur(f, offset) = -1 then
+                            goto endloop;
+                        a = a + word(offset);
                     end;
                     else if buf(0) = '-' then
                     do;
-                        a = gocur(f, a, -integer(xstr2word(.buf)));
+                        offset = -integer(xstr2word(.buf(1)));
+                        if fseekcur(f, offset) = -1 then
+                            goto endloop;
+                        a = a + word(offset);
                     end;
                     else if buf(0) = 'e' and buf(1) = '-' then
                     do;
-                        a = goend(f, a, xstr2word(.buf(2)));
+                        pos = xstr2word(.buf(2));
+                        if fseekend(f, pos) = -1 then
+                            goto endloop;
+                        a = fgetsize(f) - pos;
                     end;
                     else if buf(0) = 'b' and buf(1) = '+' then
                     do;
-                        a = goset(f, a, xstr2word(.buf(2)));
+                        pos = xstr2word(.buf(2));
+                        if fseekset(f, pos) = -1 then
+                            goto endloop;
+                        a = pos;
                     end;
                     else
                     do;
-                        a = goset(f, a, xstr2word(.buf(0)));
+                        pos = xstr2word(.buf);
+                        if fseekset(f, pos) = -1 then
+                            goto endloop;
+                        a = pos;
                     end;
+                    call prstr(.('a = ', 0));
+                    call prhexword(a);
+                    call prcrlf;
                     n = freadbuf(f, .buf, line$len);
                 end;
                 /* TODO: g=go to address: read from kb
@@ -183,6 +246,7 @@ continue:
         end;
         call prhexword(a);
         call prcrlf;
+endloop:
 close:
         call fclose(f);
     end;
