@@ -6,8 +6,13 @@ $include (sys.ext)
 
     declare i word;
     declare buf (255) byte;
+    declare len word;
 
-    call readln(.buf, 255);
+    len = readln(.buf, 255);
+    call prchr('[');
+    call prhexword(len);
+    call prchr(']');
+    call prcrlf;
     call prchr('{');
     call prstr(.buf);
     call prchr('}');

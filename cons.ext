@@ -25,7 +25,7 @@ readkey: procedure (pkey) external;
     declare pkey address;
 end readkey;
 
-readln: procedure (pstr, len) external;
+readln: procedure (pstr, len) word external;
     declare pstr address;
     declare len word;
 end readln;

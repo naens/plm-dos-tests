@@ -218,39 +218,37 @@ readkey:
 ;    pstr - address of the destination where to write the string.
 ;    len - maximum length of the string to read (last null byte included.
 ;  RETURN VALUE
-;    Doesn't return a value.
+;    Returns the length of the string.
 ;****
-
+; ds:bx  -  [len-max|len-str|str]
 readln:
 	push	bp
 	mov	bp, sp
 
 	mov	bx, [bp+6]
-	push	bx
 	mov	ax, [bp+4]
 	dec	ax
-	mov	[bx], ax
+	mov	[bx], ax	; len-max = len
 	mov	dx, bx
 
 	mov	ah, rdstr
 	int	dos
 
-	pop	bx
-	mov	bx, dx
-	mov	al, [bx+1]
+	mov	al, [bx+1]	; number of bytes
 	mov	ah, 0
-	mov	si, ax
-	mov	byte [bx+si+2], 0
+	mov	si, ax		; si = number of bytes
 
 	mov	di, 0
 .l:
 	cmp	di, si
-	ja	.e
-	mov	al, [bx+di+2]
-	mov	[bx+di], al
+	jae	.e
+	mov	dl, [bx+di+2]	; copy string from bx+2
+	mov	[bx+di], dl	; to bx
 	inc	di
 	jmp	.l
 .e:
+	mov	byte [bx+di], 0	; end the string with '\0'
 	call	prcrlf
+	mov	ax, si		; set ax to be the length of the string read
 	pop	bp
 	ret	4

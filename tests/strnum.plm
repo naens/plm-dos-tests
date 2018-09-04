@@ -8,8 +8,9 @@ $include('str.ext')
 
     declare buf (128) byte;
     declare w word;
+    declare n word;
 
-    call readln(.buf, 255);
+    n = readln(.buf, 255);
 
     call prstr(.('string is ', 0));
     call println(.buf);

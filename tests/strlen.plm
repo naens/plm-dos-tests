@@ -8,12 +8,18 @@ $include (str.ext)
 
     declare str (128) byte;
     declare length word;
+    declare nbytes word;
 
     call prstr(.('Enter string: ', 0));
-    call readln(.str, 128);
+    nbytes = readln(.str, 128);
+    call prstr(.('The number of bytes in the string is ', 0));
+    call prhexword(nbytes);
+    call prcrlf;
+    
     length = strlen(.str);
     call prstr(.('The length of the string is ', 0));
     call prhexword(length);
+    call prcrlf;
 
     call term;
 end;
