@@ -26,38 +26,21 @@ $include (sys.ext)
 $include (fio.ext)
 $include (str.ext)
 
-    declare argc integer;
-    declare pargv address;
-    declare argv based pargv (*) address;
-
     declare line$len literally '16';
     declare line$num literally '16';
 
-    declare f integer;
-    declare n word;         /* number of butes read */
-    declare a word;         /* position in the file */
-    declare nread word;     /* number of bytes read for one screen */
-    declare pos word;
-    declare offset integer;
-    declare buf(line$len) byte;
-    declare key word;
-    declare scrsz word;     /* number of bytes on one screen */
-    declare numlen word;
-    declare xcmd boolean;   /* valid command executed */
-
-
     /* prints n hex numbers separated by spaces, with padding to width */
-    printhexline: procedure (pbuf, n, width);
+    printhexline: procedure (pbuf, len, width);
         declare pbuf address;
-        declare buf based pbuf (*) byte;
-        declare n word;
+        declare bf based pbuf (*) byte;
+        declare len word;
         declare width integer;
         declare i integer;
         do i = 0 to width - 1;
-            if i < integer(n) then
-                call prhexbyte(buf(i));
+            if i < integer(len) then
+                call prhexbyte(bf(i));
             else
-                call prstr(.('  ', 0));
+                call prstr(.('   ', 0));
             call prchr(' ');
             if i = 7 then
                 call prchr(' ');
@@ -66,15 +49,15 @@ $include (str.ext)
 
 
     /* prints n chars from buffer */
-    printcharline: procedure (pbuf, n);
+    printcharline: procedure (pbuf, len);
         declare pbuf address;
-        declare buf based pbuf (*) byte;
-        declare n word;
+        declare bf based pbuf (*) byte;
+        declare len word;
         declare i integer;
         declare c word;
         call prchr('|');
-        do i = 0 to n - 1;
-            c = buf(i);
+        do i = 0 to len - 1;
+            c = bf(i);
             if c < ' ' or c > '~' then
                 call prchr('.');
             else
@@ -90,11 +73,11 @@ $include (str.ext)
         declare pbuf address;
         declare len word;
         declare nline word;
-        call prhexword(a);
+        call prhexword(addr);
         call prstr(.('    ', 0));
-        call printhexline(.buf, n, line$len);
+        call printhexline(pbuf, len, line$len);
         call prchr(' ');
-        call printcharline(.buf, n);
+        call printcharline(pbuf, len);
         call prcrlf;
     end display$line;
 
@@ -107,16 +90,16 @@ $include (str.ext)
         declare f integer;
         declare addr word;
         declare pbuf address;
-        declare len word;
-        declare num word;
+        declare len word;       /* maximum length of a line */
+        declare num word;       /* maximum number of lines to display */
         declare total word;
         declare nline word;
         declare i word;
         total = 0;
         i = 0;
-        do while i < len;
+        do while i < num;
             nline = freadbuf(f, pbuf, len);
-            call display$line(addr, pbuf, len, nline);
+            call display$line(addr + total, pbuf, len, nline);
             total = total + nline;
             if nline < len then
                 goto endloop;
@@ -125,6 +108,7 @@ $include (str.ext)
     endloop:
         return total;
     end display$screen;
+
 
     /* parses the seek command and executes it
      * return 0 on success, -1 on error
@@ -238,6 +222,22 @@ $include (str.ext)
      *   end loop
      */
 
+    declare argc integer;
+    declare pargv address;
+    declare argv based pargv (*) address;
+
+    declare f integer;
+    declare n word;         /* number of butes read */
+    declare a word;         /* position in the file */
+    declare nread word;     /* number of bytes read for one screen */
+    declare pos word;
+    declare offset integer;
+    declare buf(line$len) byte;
+    declare key word;
+    declare scrsz word;     /* number of bytes on one screen */
+    declare numlen word;
+    declare xcmd boolean;   /* valid command executed */
+
     /* read arguments */
     call getargs(.argc, .pargv);
     if argc <> 2 then
@@ -260,7 +260,9 @@ $include (str.ext)
         nread = display$screen(f, a, .buf, line$len, line$num);
         a = a + nread;
         xcmd = false;
-        do while not xcmd;      /* repeat readkey until a command is executed */
+
+        /* repeat readkey until a command is executed */
+        do while not xcmd;
             call readkey(.key);
             if key = 'q' then       /* q: exit */
                 goto endloop;
@@ -270,23 +272,26 @@ $include (str.ext)
                 n = readln(.buf, line$len - 1);
                 if seek$go(f, a, .buf, n, .xcmd) = -1 then
                     goto endloop;   /* catastrophic failure: nothing to do */
+                xcmd = true;
             end;
             else if key = 'u' then  /* u: go one screen up */
             do;
                 if a > nread then
                 do;
-                    call println(.('going one screen up', 0));
+                    if a > 2 * line$len * line$num then
+                        pos = a - 2 * line$len * line$num;
+                    else
+                        pos = 0;
+                    if fseekset(f, pos) <> -1 then
+                        a = pos;
                     xcmd = true;
                 end;
-                /* TODO */
             end;
             else                    /* any other key: go one screen down */
-            do;
-                /* TODO */
-                call println(.('going one screen down', 0));
                 xcmd = true;
-            end;
         end;
+        call prcrlf;
+
     end;
 endloop:
 /*
@@ -379,10 +384,6 @@ endloop:
 continue:
         end;
 */
-
-    call prstr(.('EXIT, address=', 0));
-    call prhexword(a);
-    call prcrlf;
 
 close:
     call fclose(f);
