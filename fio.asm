@@ -670,32 +670,22 @@ fseekend:
 	mov	[newblk], ax
 	mov	[newbpos], dx
 
+
 	; dos seek end pos => newpos
 	add	dx, bx		; dx := (newbpos=dx) + (pos=bx)
 
-	; TODO: fix
-
-;	push	dx
-
-;	mov	ax, '#'
-;	push	ax
-;	call	prchr
-;	push	bx
-;	call	prhexword
-
-;	mov	ax, '#'
-;	push	ax
-;	call	prchr
-;	push	dx
-;	call	prhexword
-;	mov	ax, '#'
-;	push	ax
-;	call	prchr
+	; temporary use from beginning instead of from end
+	mov	ax, [newblk]
+	mov	cx, bufsz
+	mul	cx
+	mov	dx, ax
 
 	mov	ah, seek
-	mov	al, 2		; seek from end
+;	mov	al, 2		; seek from end
+	mov	al, 0		; seek from the beginning
 	mov	bx, [fhandle]
 	mov	cx, 0
+;	neg	dx
 	int	dos
 	jc	.error
 
@@ -707,13 +697,17 @@ fseekend:
 	int	dos
 	jc	.error
 
+	mov	[buflen], ax
+	mov	byte [bufmodified], 0
 	mov	ax, [newblk]
 	mov	[curblk], ax
 	mov	ax, [newbpos]
 	mov	[bufpos], ax
-	mov	byte [bufmodified], 0
 
 .done:
+
+
+
 	mov	ax, 0
 	jmp	.end
 
