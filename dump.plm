@@ -100,9 +100,9 @@ $include (str.ext)
         do while i < num;
             nline = freadbuf(f, pbuf, len);
             call display$line(addr + total, pbuf, len, nline);
-            total = total + nline;
             if nline < len then
                 goto endloop;
+            total = total + nline;
             i = i + 1;
         end;
     endloop:
@@ -270,9 +270,15 @@ $include (str.ext)
     a = 0;
     do while true;
         /* read and display one screen, return number of bytes read */
+        call prstr(.('reading a=', 0));
+        call prhexword(a);
+        call prcrlf;
         nread = display$screen(f, a, .buf, line$len, line$num);
         a = a + nread;
         xcmd = false;
+        call prstr(.('finish reading a=', 0));
+        call prhexword(a);
+        call prcrlf;
 
         /* repeat readkey until a command is executed */
         do while not xcmd;
