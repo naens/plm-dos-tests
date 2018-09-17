@@ -638,7 +638,7 @@ fseekcur:
 ;  if newblk = curblk then
 ;    bufpos := newbpos
 ;  else
-;    dos seek end fsize - (newpos mod bufsz)
+;    dos seek end newpos + newbpos
 ;    dos read block
 ;    curblk := newblk
 ;    bufpos := newbpos
@@ -650,13 +650,13 @@ fseekend:
 	test	al, 2
 	jz	.error		; if not writable then return -1
 
-	mov	bx, [fsize]
-	sub	bx, [bp+4]	; newpos in bx
+	mov	bx, [bp+4]	; pos in bx
+	mov	ax, [fsize]
+	sub	ax, bx		; newpos in ax = filesz - (pos=bx)
 	js	.error		; if newpos < 0 then return -1
 
-	; curblk := block number: pos div bufsz, bufpos := pos mod bufsz
+	; curblk := block number: newpos div bufsz, bufpos := newpos mod bufsz
 	mov	dx, 0
-	mov	ax, [bp+4]
 	mov	cx, bufsz
 	div	cx		; div in ax=newblk, mod in dx=newbpos
 
@@ -671,12 +671,27 @@ fseekend:
 	mov	[newbpos], dx
 
 	; dos seek end pos => newpos
-	mov	dx, 0
-	mov	ax, bx		; ax := newpos (in bx)
-	mov	cx, bufsz
-	div	cx		; dx := newpos mod bufsz
-	neg	dx
-	add	dx, [fsize]	; dx := fsize - (newpos mod bufsz)
+	add	dx, bx		; dx := (newbpos=dx) + (pos=bx)
+
+	; TODO: fix
+
+;	push	dx
+
+;	mov	ax, '#'
+;	push	ax
+;	call	prchr
+;	push	bx
+;	call	prhexword
+
+;	mov	ax, '#'
+;	push	ax
+;	call	prchr
+;	push	dx
+;	call	prhexword
+;	mov	ax, '#'
+;	push	ax
+;	call	prchr
+
 	mov	ah, seek
 	mov	al, 2		; seek from end
 	mov	bx, [fhandle]
@@ -684,10 +699,19 @@ fseekend:
 	int	dos
 	jc	.error
 
+	; dos read block
+	mov	ah, read
+	mov	bx, [fhandle]
+	mov	cx, bufsz
+	mov	dx, fbuf
+	int	dos
+	jc	.error
+
 	mov	ax, [newblk]
 	mov	[curblk], ax
 	mov	ax, [newbpos]
 	mov	[bufpos], ax
+	mov	byte [bufmodified], 0
 
 .done:
 	mov	ax, 0

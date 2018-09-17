@@ -109,22 +109,62 @@ $include (str.ext)
         return total;
     end display$screen;
 
+    is$hex$char: procedure (c) boolean;
+        declare c byte;
+        if c >= '0' and c <= '9' then
+            return true;
+        if c >= 'a' and c <= 'f' then
+            return true;
+        if c >= 'A' and c <= 'F' then
+            return true;
+        return false;
+    end is$hex$char;
+
 
     /* parses the seek command and executes it
      * return 0 on success, -1 on error
      * sets a (the new address in the file)
      * sets xcmd telling whther a command has been executed */
-    seek$go: procedure(f, paddr, pbuf, slen, pxcmd) integer;
+    seek$go: procedure (f, paddr, pbuf, slen, pxcmd) integer;
         declare f integer;
         declare paddr address;
         declare a based paddr word;
         declare pbuf address;
-        declare buf based pbuf (*) address;
+        declare buf based pbuf (*) byte;
         declare slen word;
         declare pos word;
         declare offset integer;
         declare pxcmd address;
         declare xcmd based pxcmd boolean;
+
+        if slen >= 3 then
+        do;
+            if buf(0) = 'e' and buf(1) = '-' then
+            do;
+                pos = xstr2word(.buf(2));
+                call prstr(.('pos=', 0));
+                call prhexword(pos);
+                call prcrlf;
+                if fseekend(f, pos) = -1 then
+                    return -1;
+                a = fgetsize(f) - pos;
+                call prstr(.('a=', 0));
+                call prhexword(a);
+                call prcrlf;
+                xcmd = true;
+                return 0;
+            end;
+        
+            if buf(0) = 'b' and buf(1) = '+' then
+            do;
+                pos = xstr2word(.buf(2));
+                if fseekset(f, pos) = -1 then
+                    return -1;
+                a = pos;
+                xcmd = true;
+                return 0;
+            end;
+        end;
  
         /* command minimum 1 character */
         if slen < 1 then
@@ -133,7 +173,7 @@ $include (str.ext)
             return 0;
         end;
 
-        if buf(0) >= '0' and buf(0) <= '9' then
+        if is$hex$char(buf(0)) then
         do;
             pos = xstr2word(.buf(0));
             if fseekset(f, pos) = -1 then
@@ -166,33 +206,6 @@ $include (str.ext)
             if fseekcur(f, offset) = -1 then
                 return -1;
             a = a + word(offset);
-            xcmd = true;
-            return 0;
-        end;
-
-        /* command minimum 3 characters */
-        if slen < 3 then
-        do;
-            xcmd = false;
-            return 0;
-        end;
-
-        if buf(0) = 'e' and buf(1) = '-' then
-        do;
-            pos = xstr2word(.buf(2));
-            if fseekend(f, pos) = -1 then
-                return -1;
-            a = fgetsize(f) - pos;
-            xcmd = true;
-            return 0;
-        end;
-        
-        if buf(0) = 'b' and buf(1) = '+' then
-        do;
-            pos = xstr2word(.buf(2));
-            if fseekset(f, pos) = -1 then
-                return -1;
-            a = pos;
             xcmd = true;
             return 0;
         end;
@@ -270,7 +283,7 @@ $include (str.ext)
             do;
                 call prstr(.('go: ', 0));
                 n = readln(.buf, line$len - 1);
-                if seek$go(f, a, .buf, n, .xcmd) = -1 then
+                if seek$go(f, .a, .buf, n, .xcmd) = -1 then
                     goto endloop;   /* catastrophic failure: nothing to do */
                 xcmd = true;
             end;
