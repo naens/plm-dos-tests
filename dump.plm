@@ -125,10 +125,11 @@ $include (str.ext)
      * return 0 on success, -1 on error
      * sets a (the new address in the file)
      * sets xcmd telling whther a command has been executed */
-    seek$go: procedure (f, paddr, pbuf, slen, pxcmd) integer;
+    seek$go: procedure (f, paddr, nread, pbuf, slen, pxcmd) integer;
         declare f integer;
         declare paddr address;
         declare a based paddr word;
+        declare nread word;         /* current: from = a - nread */
         declare pbuf address;
         declare buf based pbuf (*) byte;
         declare slen word;
@@ -192,17 +193,17 @@ $include (str.ext)
 
         if buf(0) = '+' then
         do;
-            offset = integer(xstr2word(.buf(1)));
+            offset = integer(xstr2word(.buf(1))) - integer(nread);
             if fseekcur(f, offset) = -1 then
                 return -1;
             a = a + word(offset);
             xcmd = true;
             return 0;
         end;
-        
+
         if buf(0) = '-' then
         do;
-            offset = -integer(xstr2word(.buf(1)));
+            offset = -integer(xstr2word(.buf(1)) + nread);
             if fseekcur(f, offset) = -1 then
                 return -1;
             a = a + word(offset);
@@ -289,7 +290,7 @@ $include (str.ext)
             do;
                 call prstr(.('go: ', 0));
                 n = readln(.buf, line$len - 1);
-                if seek$go(f, .a, .buf, n, .xcmd) = -1 then
+                if seek$go(f, .a, nread, .buf, n, .xcmd) = -1 then
                     goto endloop;   /* catastrophic failure: nothing to do */
                 xcmd = true;
             end;
