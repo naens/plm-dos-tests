@@ -29,18 +29,23 @@ $include (str.ext)
     declare line$len literally '16';
     declare line$num literally '16';
 
-    /* prints n hex numbers separated by spaces, with padding to width */
+    /* prints n hex numbers separated by spaces, with padding to width
+     * Parameters:
+     *    pbuf - address of buffer to print
+     *    len - number of bytes in the line
+     *    width - needed width of the line
+     */
     printhexline: procedure (pbuf, len, width);
         declare pbuf address;
         declare bf based pbuf (*) byte;
         declare len word;
-        declare width integer;
-        declare i integer;
-        do i = 0 to width - 1;
-            if i < integer(len) then
+        declare width word;
+        declare i word;
+        do i = 1 to width;
+            if i <= len then
                 call prhexbyte(bf(i));
             else
-                call prstr(.('   ', 0));
+                call prstr(.('  ', 0));
             call prchr(' ');
             if i = 7 then
                 call prchr(' ');
@@ -75,7 +80,7 @@ $include (str.ext)
         declare nline word;
         call prhexword(addr);
         call prstr(.('    ', 0));
-        call printhexline(pbuf, len, line$len);
+        call printhexline(pbuf, nline, len);
         call prchr(' ');
         call printcharline(pbuf, len);
         call prcrlf;
@@ -267,19 +272,12 @@ $include (str.ext)
         call println(.('File open error', 0));
         goto exit;
     end;
-    call println(.('File open OK!', 0));
     a = 0;
     do while true;
         /* read and display one screen, return number of bytes read */
-        call prstr(.('reading a=', 0));
-        call prhexword(a);
-        call prcrlf;
         nread = display$screen(f, a, .buf, line$len, line$num);
         a = a + nread;
         xcmd = false;
-        call prstr(.('finish reading a=', 0));
-        call prhexword(a);
-        call prcrlf;
 
         /* repeat readkey until a command is executed */
         do while not xcmd;
@@ -307,105 +305,14 @@ $include (str.ext)
                     xcmd = true;
                 end;
             end;
-            else                    /* any other key: go one screen down */
+            else if not feof(f) then /* any other key: go one screen down */
                 xcmd = true;
         end;
         call prcrlf;
 
     end;
 endloop:
-/*
-    if f <> -1 then
-    do;
-        call println(.('File open OK!', 0));
-        call prhexword(fgetsize(f));
-        call prcrlf;
-        n = freadbuf(f, .buf, line$len);
-        a = 0;
-        scrsz = line$len * line$num;
-        do while n > 0;
-            if a > 0 and a mod scrsz = 0 then
-            do;
-                call readkey(.key);
-                if key = 'u' then
-                do;
-                    if a >= 2 * scrsz then
-                    do;
-                        if fseekset(f, a - 2 * scrsz) <> -1 then
-                        do;
-                            a = a - 2 * scrsz;
-                            n = freadbuf(f, .buf, line$len);
-                        end;
-                    end;
-                    else
-                        goto continue;
-                end;
-                if key = 'g' then
-                do;
-                    call prstr(.('a = ', 0));
-                    call prhexword(a);
-                    call prcrlf;
-                    call prstr(.('go: ', 0));
-                    call readln(.buf, line$len - 1);
-                    call prstr(.('going: ', 0));
-                    call println(.buf);
-                    if buf(0) = '+' then
-                    do;
-                        offset = integer(xstr2word(.buf(1)));
-                        if fseekcur(f, offset) = -1 then
-                            goto endloop;
-                        a = a + word(offset);
-                    end;
-                    else if buf(0) = '-' then
-                    do;
-                        offset = -integer(xstr2word(.buf(1)));
-                        if fseekcur(f, offset) = -1 then
-                            goto endloop;
-                        a = a + word(offset);
-                    end;
-                    else if buf(0) = 'e' and buf(1) = '-' then
-                    do;
-                        pos = xstr2word(.buf(2));
-                        if fseekend(f, pos) = -1 then
-                            goto endloop;
-                        a = fgetsize(f) - pos;
-                    end;
-                    else if buf(0) = 'b' and buf(1) = '+' then
-                    do;
-                        pos = xstr2word(.buf(2));
-                        if fseekset(f, pos) = -1 then
-                            goto endloop;
-                        a = pos;
-                    end;
-                    else
-                    do;
-                        pos = xstr2word(.buf);
-                        if fseekset(f, pos) = -1 then
-                            goto endloop;
-                        a = pos;
-                    end;
-                    call prstr(.('a = ', 0));
-                    call prhexword(a);
-                    call prcrlf;
-                    n = freadbuf(f, .buf, line$len);
-                end;
-                else if key = 'q' then
-                    goto close;
-                call prcrlf;
-            end;
-            call prhexword(a);
-            call prstr(.('    ', 0));
-            call printhexline(.buf, n, line$len);
-            call prchr(' ');
-            call printcharline(.buf, n);
-            call prcrlf;
-            a = a + n;
-            n = freadbuf(f, .buf, line$len);
-continue:
-        end;
-*/
 
-close:
     call fclose(f);
 
 exit:
