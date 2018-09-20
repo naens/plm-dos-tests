@@ -10,18 +10,25 @@ xstr2word: procedure (pstr) word external;
     declare pstr address;
 end xstr2word;
 
+xstr2byte: procedure (pstr) byte external;
+    declare pstr address;
+end xstr2byte;
+
 dstr2int: procedure (pstr) integer external;
     declare pstr address;
 end dstr2int;
 
-int2xstr: procedure (n, pbuf, buflen) word external;
-    declare n integer;
+word2xstr: procedure (w, pbuf) external;
+    declare w word;
     declare pbuf address;
-    declare buflen word;
-end int2xstr;
+end word2xstr;
 
-int2dstr: procedure (n, pbuf, buflen) word external;
+byte2xstr: procedure (b, pbuf) external;
+    declare b byte;
+    declare pbuf address;
+end byte2xstr;
+
+int2dstr: procedure (n, pbuf) word external;
     declare n integer;
     declare pbuf address;
-    declare buflen word;
 end int2dstr;
