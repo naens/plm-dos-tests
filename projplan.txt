@@ -1,14 +1,14 @@
 Plan for the Project
 ====================
 * Exercises
-    -> hw: hello world
+    -> [DONE] hw: hello world
        [i/o] writestring, writechar
        Displays the "Hello, World!" string.
-    -> mincalc: minimalistic calculator
+    -> minicalc: minimal calculator
        [i/o] readline, readnumber, writenumber
        [lib] dec_to_hex, hex_to_dec
        Asks base (10 or 16), operation and operands, writes the result.
-    -> dump: file dump
+    -> [DONE] dump: file dump
        [i/o] openfile, readfile, readchar
        [lib] cli-args
        Prints the contents of a file in hexadecimal.
