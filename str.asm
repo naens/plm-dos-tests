@@ -13,6 +13,9 @@ global strcmp, strlen, xstr2word, xstr2byte, dstr2int, word2xstr, byte2xstr, int
 
 %include "dos.def"
 
+	segment	data	class=data
+	segment code	class=code
+
 ;****f* plm-exercises/strcmp
 ;  NAME
 ;    strcmp -- compare two strings
@@ -225,10 +228,10 @@ dstr2int:
 ;  RETURN VALUE
 ;    There is no return value
 ;****
-	segment	data	class=data
+	segment	data
 digits		db 	'0123456789abcdef'
 
-	segment code	class=code
+	segment code
 word2xstr:
 	push	bp
 	mov	bp, sp
@@ -292,6 +295,57 @@ byte2xstr:
 	pop	bp
 	ret
 
+;****f* str/int2dstr
+;  NAME
+;    int2dstr -- convert integer to decimal string
+;  DESCRIPTION
+;    Converts an integer into a null-terminated string containing its
+;    signed decimal representation.  The number can be positive or negative,
+;    in which case it will contain a negation sign.  The string
+;    representation can be 7 bytes, including the terminating zero.  The
+;    string does not contain leading zeros.
+;  PARAMETERS
+;    n - the integer to convert
+;    pbuf - buffer where to write
+;  RETURN VALUE
+;    No value is returned.
+;****
+;  Pseudocode:
+;    1. sign
+;    if n < 0 then
+;      tmp1 := -n
+;    else
+;      tmp1 := n
+;    2. fill tmpbuf
+;    i := 0
+;    while tmp1 > 0 do:
+;      buf[i] := tmp1 mod 10
+;      tmp1 := tmp1 div 10
+;      i := i + 1
+;    3. put sign
+;    if n < 0 then
+;      buf[i] = '-'
+;      i := i + 1
+;    4. reverse string
+;    j := 0
+;    while i > 0 do:
+;      pbuf[j] := buf[i]
+;      j := j + 1
+;      i := i - 1
+;    5. put zero terminator
+;      pbuf[j] := 0
+;
+	segment	data
+tmpbuf		resb	8
 
-; convert integer to decimal string
+	segment code
 int2dstr:
+	push	bp
+	mov	bp, sp
+
+
+	; TODO
+
+
+	pop	bp
+	ret
