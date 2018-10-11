@@ -13,8 +13,11 @@ do;
 $include ('sys.ext')
 $include ('cons.ext')
 
-    call prstr(.('HELLO!', 13, 10, 0));
-    call prstr(.('HELLO...', 0));
-    call term;
+declare main label public;
 
+main:
+    call prstr(.('HELLO!', 13, 10, 0));
+    call prstr(.('abcdef', 13, 10, 0));
+    call prstr(.('ABCDEFGH', 0));
+    call term;
 end hello;
