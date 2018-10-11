@@ -7,7 +7,7 @@ lcfiles()
     do
         local fn=$(basename $file)
         local dn=$(dirname $file)
-	    local lcfn=$(echo "$fn" | tr [:upper:] [:lower:])
+        local lcfn=$(echo "$fn" | tr [:upper:] [:lower:])
         mv $dn/$fn $dn/$lcfn
     done
 }
@@ -18,11 +18,11 @@ test_build()
     local name=$2
     local fn=$dir/$name
     echo $'\n'$'\n'COMPILING $fn
-	./dosexec plm86 $fn.plm code small xref symbols
+    ./dosexec plm86 $fn.plm code small xref symbols
     lcfiles "$(find $dir | grep -i $name | grep '[A-Z]')"
 
     wcl @wcl.lnk -zq -d2 -lr -bc -bcl=dos -fe=$fn.exe $fn.obj sys.obj cons.obj fio.obj str.obj
-	mv $name.map $dir
+    mv $name.map $dir
 }
 
 tdir=tests
@@ -31,9 +31,13 @@ singlefile="$1"
 if [[ -n "$singlefile" && -f "$singlefile" ]]
 then
     files="$singlefile"
-else
+else if [[ -z "$singlefile" ]]; then
     files="$tdir/*.plm"
+else
+    echo bad arguments
+    exit
 fi
+
 for f in $files
 do
     fn=$(basename $f)

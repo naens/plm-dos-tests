@@ -5,19 +5,21 @@ if [[ -z "$command" ]]; then
     SDL_AUDIODRIVER=dummy dosbox \
 		-c "mount c $(pwd)" \
 		-c "c:" \
+		-c "set path=%path%;c:\disk\tasm\bin" \
 		-c "cls"
 else
     tmpfile='tmp.$$$'
     SDL_AUDIODRIVER=dummy dosbox \
 		-c "mount c $(pwd)" \
 		-c "c:" \
+		-c "set path=%path%;c:\disk\tasm\bin" \
 		-c "cls" \
 		-c "$command" \
 		-c "pause" \
 		-c "exit"
 fi
 
-for f in *
+for f in $(find . ! -path './.git*' ! -path './troff/*' ! -path './docs/*' ! -name Makefile ! -name TODO)
 do
     fn=$(echo "$f" | tr [:upper:] [:lower:])
     if [ ! "$f" = "$fn" -a ! "$f" = "Makefile" ]
