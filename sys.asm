@@ -1,6 +1,6 @@
 global entry, getargs, term
 
-extern prchr, prstr, prcrlf, prhexbyte, prhexword, prstr, readkey, readln
+extern main, prchr, prstr, prcrlf, prhexbyte, prhexword, prstr, readkey, readln
 
 ;****h* plm-exercises/sys
 ;  NAME
@@ -34,6 +34,7 @@ tlen		resb	1
 
         segment code class=code
 entry:
+..start:
 	; save psp
 	push	ds		; push psp value
 	mov	ax, data
@@ -61,8 +62,8 @@ entry:
 	mov	byte [di], 0
 
 	; jump to the code
-	mov	ax, 0
-	jmp	ax
+	jmp	main
+
 
 ;****f* sys/getargs
 ;  NAME
