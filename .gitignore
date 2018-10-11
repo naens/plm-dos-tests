@@ -8,4 +8,7 @@
 *.exe
 *.lib
 *.inc
+*.tr
 test.txt
+!plm86.exe
+disk
