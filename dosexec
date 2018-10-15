@@ -9,7 +9,13 @@ SDL_VIDEODRIVER=dummy SDL_AUDIODRIVER=dummy \
 		-c "$command > tmp.\$\$\$" \
 		-c "exit" > /dev/null
 
-for f in $(find . ! -path './.git*' ! -path './troff/*' ! -path './docs/*' ! -name Makefile ! -name TODO)
+for f in $(find . \
+	! -path './.git*' \
+	! -path './troff/*' \
+	! -path './docs/*' \
+	! -path './disk/*' \
+	! -name Makefile \
+	! -name TODO )
 do
     fn=$(echo "$f" | tr [:upper:] [:lower:])
     if [ ! "$f" = "$fn" -a ! "$f" = "Makefile" ]
