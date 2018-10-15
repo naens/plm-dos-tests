@@ -16,8 +16,8 @@ $include ('cons.ext')
 declare main label public;
 
 main:
-    call prstr(.('HELLO!', 13, 10, 0));
-    call prstr(.('abcdef', 13, 10, 0));
-    call prstr(.('ABCDEFGH', 0));
+    call prstr(.('Hello, World!', 0Dh, 0Ah, 0));
+    call prstr(.('Hello, World!', 0Dh, 0Ah, 0));
+    call prstr(.('Hello, World!', 0Dh, 0Ah, 0));
     call term;
 end hello;

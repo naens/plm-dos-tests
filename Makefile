@@ -1,10 +1,10 @@
 libs := sys cons str fio
 
 %.obj: %.asm
-	@nasm -g -f obj $< -o $@
+	nasm -g -f obj $< -o $@ -l $(basename $@).lst
 
 %.obj: %.plm
-	./dosexec plm86 $< small symbols optimize\(0\) debug code xref
+	./dosexec plm86 $< small optimize\(0\) debug code symbols nopaging
 
 %.exe: %.plm %.obj $(foreach lib,$(libs),$(lib).obj)
 	echo plm-file
@@ -18,3 +18,4 @@ clean:
 	@rm -f $(shell find . -name '*.exe' ! -path './disk/*' ! -name 'plm86.exe')
 	@rm -f $(shell find . -name '*.lst' ! -path './disk/*')
 	@rm -f $(shell find . -name '*.map' ! -path './disk/*')
+	@rm -f $(shell find . -name '*.obj' ! -path './disk/*')
