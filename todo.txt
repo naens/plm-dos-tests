@@ -1,0 +1,12 @@
+* output functions (integers and strings)
+=> project: hello
+* input functions (read from stdin)
+=> project: mini calculator
+* memory functions (alloc and free)
+=> project: stack calculator
+* file read functions
+=> project: file dump
+* file write functions
+=> project: word frequency
+* file system functions
+=> project: file manager
