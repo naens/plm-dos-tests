@@ -3,6 +3,7 @@
 *.map
 *.obj
 *.bak
+*.old
 *.err
 *.sym
 *.exe
