@@ -1,0 +1,19 @@
+.\" Source: ./str.asm
+.\" Generated with ROBODoc Version 4\.99\.43 (Mar  7 2018)
+.\" ROBODoc (c) 1994\-2015 by Frans Slothouber and many others\.
+.TH byte2xstr 3 "Oct 22, 2018" str "str Reference"
+
+.SH NAME
+\fBbyte2xstr\fR \-\- create a hexadecimal string representation of a byte
+
+.SH DESCRIPTION
+Writes a null\-terminated hexadecimal string representation of the byte
+given as parameter\.  The string can contain a leading zero in order to
+have the length of 2\.
+
+.SH PARAMETERS
+b \- the byte to create the string from
+pbuf \- buffer where to write the string
+
+.SH RETURN VALUE
+Does not return anything

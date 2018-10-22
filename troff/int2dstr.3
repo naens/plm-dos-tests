@@ -1,0 +1,21 @@
+.\" Source: ./str.asm
+.\" Generated with ROBODoc Version 4\.99\.43 (Mar  7 2018)
+.\" ROBODoc (c) 1994\-2015 by Frans Slothouber and many others\.
+.TH int2dstr 3 "Oct 22, 2018" str "str Reference"
+
+.SH NAME
+\fBint2dstr\fR \-\- convert integer to decimal string
+
+.SH DESCRIPTION
+Converts an integer into a null\-terminated string containing its
+signed decimal representation\.  The number can be positive or negative,
+in which case it will contain a negation sign\.  The string
+representation can be 7 bytes, including the terminating zero\.  The
+string does not contain leading zeros\.
+
+.SH PARAMETERS
+n \- the integer to convert
+pbuf \- buffer where to write
+
+.SH RETURN VALUE
+No value is returned\.

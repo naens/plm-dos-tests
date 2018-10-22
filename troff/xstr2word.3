@@ -1,0 +1,19 @@
+.\" Source: ./str.asm
+.\" Generated with ROBODoc Version 4\.99\.43 (Mar  7 2018)
+.\" ROBODoc (c) 1994\-2015 by Frans Slothouber and many others\.
+.TH xstr2word 3 "Oct 22, 2018" str "str Reference"
+
+.SH NAME
+xtr2int \-\- convert a string containing a hexadecimal number to word
+
+.SH DESCRIPTION
+Converts a null\-terminated string containing a hexadecimal integer to
+word (unsigned 16\-bit integer type)\.  Reads as long as the string
+contains legal hexadecimal characters, stops when other character is
+detected (can overflow)\.  Returns the resulting word\.
+
+.SH PARAMETERS
+pstr \- pointer to string to read
+
+.SH RETURN VALUE
+Returns the value of the integer represented by the string\.

@@ -1,0 +1,20 @@
+.\" Source: ./str.asm
+.\" Generated with ROBODoc Version 4\.99\.43 (Mar  7 2018)
+.\" ROBODoc (c) 1994\-2015 by Frans Slothouber and many others\.
+.TH word2xstr 3 "Oct 22, 2018" str "str Reference"
+
+.SH NAME
+\fBword2xstr\fR \-\- convert integer to hexadecimal string
+
+.SH DESCRIPTION
+Creates a hexadecimal string representation of an integer\.  The string
+is null\-terminated and should be big enough to contain the resulting
+string\.  The number is read as unsigned\.  The string will be of length
+4, with leading zeros if needed\.
+
+.SH PARAMETERS
+w \- the word to convert
+pbuf \- the address where the string will be stored
+
+.SH RETURN VALUE
+There is no return value

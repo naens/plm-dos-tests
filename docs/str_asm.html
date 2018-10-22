@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html  xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Style-Type" content="text/css" />
+<meta http-equiv="Content-type" content="text/html; charset=ISO-8859-1" />
+<link rel="stylesheet" href="./robodoc.css" type="text/css" />
+<title>./str.asm</title>
+<!-- Source: ./str.asm -->
+<!-- Generated with ROBODoc Version 4.99.43 (Mar  7 2018) -->
+</head>
+<body>
+<div id="logo">
+<a name="robo_top_of_doc"></a>
+</div> <!-- logo -->
+<div id="navigation">
+<a class="menuitem" href="./toc_index.html#top">Table of Contents</a>
+<a class="menuitem" href="./robo_sourcefiles.html#top">Sourcefiles</a>
+<a class="menuitem" href="./masterindex.html#top">Index</a>
+<a class="menuitem" href="./robo_functions.html#top">Functions</a>
+<a class="menuitem" href="./robo_modules.html#top">Modules</a>
+<a class="menuitem" href="./robo_program.html#top">Program</a>
+</div> <!-- navigation -->
+<div id="content">
+<h3>TABLE OF CONTENTS</h3>
+<ul>
+<li>1. <a href="#robo2">plm-exercises/str</a></li>
+<ul>
+<li>1.1. <a href="#robo26">str/byte2xstr</a></li>
+<li>1.2. <a href="#robo27">str/dstr2int</a></li>
+<li>1.3. <a href="#robo28">str/int2dstr</a></li>
+<li>1.4. <a href="#robo29">str/word2xstr</a></li>
+<li>1.5. <a href="#robo30">str/xstr2byte</a></li>
+<li>1.6. <a href="#robo31">str/xstr2word</a></li>
+</ul>
+<li>2. <a href="#robo24">plm-exercises/strcmp</a></li>
+<li>3. <a href="#robo25">plm-exercises/strlen</a></li>
+</ul>
+<hr />
+<a name="plm2dexercises2fstr"></a>
+<a name="robo2"></a><h2>plm-exercises/str [ Modules ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./robo_modules.html#robo_top_of_doc">Modules</a> ]</p>
+<p class="item_name">NAME</p>
+<pre>    <strong>str</strong> -- String functions
+</pre>
+<p class="item_name">DESCRIPTION</p>
+<pre>    Module for string comparison and transformation.
+</pre>
+<p class="item_name">USES</p>
+<pre>    dos.def, <a href="./cons_asm.html#robo_top_of_doc">cons.asm</a>
+</pre>
+
+<hr />
+<a name="plm2dexercises2fstrcmp"></a>
+<a name="robo24"></a><h2>plm-exercises/strcmp [ Functions ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./robo_functions.html#robo_top_of_doc">Functions</a> ]</p>
+<p class="item_name">NAME</p>
+<pre>    <strong>strcmp</strong> -- compare two strings
+</pre>
+<p class="item_name">DESCRIPTION</p>
+<pre>    Compares two strings and returns 0 if they are equal, -1 or 1 if the
+    first string is before or after in code-point order.
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre>    pstr1 - first string
+    pstr2 = second string
+</pre>
+<p class="item_name">RETURN VALUE</p>
+<pre>    Returns an integer telling if the first string is before, equal or
+    after in code-point ordering the second string.
+</pre>
+
+<hr />
+<a name="plm2dexercises2fstrlen"></a>
+<a name="robo25"></a><h2>plm-exercises/strlen [ Functions ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./robo_functions.html#robo_top_of_doc">Functions</a> ]</p>
+<p class="item_name">NAME</p>
+<pre>    <strong>strlen</strong> -- get the length of a string
+</pre>
+<p class="item_name">DESCRIPTION</p>
+<pre>    Returns the number of characters in a null-terminated string before the
+    null character.
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre>    pstr - string
+</pre>
+<p class="item_name">RETURN VALUE</p>
+<pre>    Returns the length of the string.
+</pre>
+
+<hr />
+<a name="str2fbyte2xstr"></a>
+<a name="robo26"></a><h2>str/byte2xstr [ Functions ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo2">str</a> ] [ <a href="./robo_functions.html#robo_top_of_doc">Functions</a> ]</p>
+<p class="item_name">NAME</p>
+<pre>    <strong>byte2xstr</strong> -- create a hexadecimal string representation of a byte
+</pre>
+<p class="item_name">DESCRIPTION</p>
+<pre>    Writes a null-terminated hexadecimal string representation of the byte
+    given as parameter.  The string can contain a leading zero in order to
+    have the length of 2.
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre>    b - the byte to create the string from
+    pbuf - buffer where to write the string
+</pre>
+<p class="item_name">RETURN VALUE</p>
+<pre>    Does not return anything
+</pre>
+
+<hr />
+<a name="str2fdstr2int"></a>
+<a name="robo27"></a><h2>str/dstr2int [ Functions ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo2">str</a> ] [ <a href="./robo_functions.html#robo_top_of_doc">Functions</a> ]</p>
+<p class="item_name">NAME</p>
+<pre>    <strong>dstr2int</strong> -- convert a decimal string to signed integer
+</pre>
+<p class="item_name">DESCRIPTION</p>
+<pre>    Converts a null terminated string, positive or negative to a 16-bit
+    signed integer.  If the string is empty 0 is returned.
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre>    pstr - pointer to string representing the integer that has to be
+    converted.
+</pre>
+<p class="item_name">RETURN VALUE</p>
+<pre>    Returns a signed integer corresponding to the input string.
+</pre>
+
+<hr />
+<a name="str2fint2dstr"></a>
+<a name="robo28"></a><h2>str/int2dstr [ Functions ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo2">str</a> ] [ <a href="./robo_functions.html#robo_top_of_doc">Functions</a> ]</p>
+<p class="item_name">NAME</p>
+<pre>    <strong>int2dstr</strong> -- convert integer to decimal string
+</pre>
+<p class="item_name">DESCRIPTION</p>
+<pre>    Converts an integer into a null-terminated string containing its
+    signed decimal representation.  The number can be positive or negative,
+    in which case it will contain a negation sign.  The string
+    representation can be 7 bytes, including the terminating zero.  The
+    string does not contain leading zeros.
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre>    n - the integer to convert
+    pbuf - buffer where to write
+</pre>
+<p class="item_name">RETURN VALUE</p>
+<pre>    No value is returned.
+</pre>
+
+<hr />
+<a name="str2fword2xstr"></a>
+<a name="robo29"></a><h2>str/word2xstr [ Functions ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo2">str</a> ] [ <a href="./robo_functions.html#robo_top_of_doc">Functions</a> ]</p>
+<p class="item_name">NAME</p>
+<pre>    <strong>word2xstr</strong> -- convert integer to hexadecimal string
+</pre>
+<p class="item_name">DESCRIPTION</p>
+<pre>    Creates a hexadecimal string representation of an integer.  The string
+    is null-terminated and should be big enough to contain the resulting
+    string.  The number is read as unsigned.  The string will be of length
+    4, with leading zeros if needed.
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre>    w - the word to convert
+    pbuf - the address where the string will be stored
+</pre>
+<p class="item_name">RETURN VALUE</p>
+<pre>    There is no return value
+</pre>
+
+<hr />
+<a name="str2fxstr2byte"></a>
+<a name="robo30"></a><h2>str/xstr2byte [ Functions ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo2">str</a> ] [ <a href="./robo_functions.html#robo_top_of_doc">Functions</a> ]</p>
+<p class="item_name">NAME</p>
+<pre>    <strong>xstr2byte</strong> -- convert a string to number and return a byte
+</pre>
+<p class="item_name">DESCRIPTION</p>
+<pre>    Converts a hexadecimal representation of a number to a number and
+    returns it as a single byte.
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre>    pstr -- pointer to the string to read
+</pre>
+<p class="item_name">RETURN VALUE</p>
+<pre>    Returns the value represented by the string.
+</pre>
+
+<hr />
+<a name="str2fxstr2word"></a>
+<a name="robo31"></a><h2>str/xstr2word [ Functions ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo2">str</a> ] [ <a href="./robo_functions.html#robo_top_of_doc">Functions</a> ]</p>
+<p class="item_name">NAME</p>
+<pre>    xtr2int -- convert a string containing a hexadecimal number to word
+</pre>
+<p class="item_name">DESCRIPTION</p>
+<pre>    Converts a null-terminated string containing a hexadecimal integer to
+    word (unsigned 16-bit integer type).  Reads as long as the string
+    contains legal hexadecimal characters, stops when other character is
+    detected (can overflow).  Returns the resulting word.
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre>    pstr - pointer to string to read
+</pre>
+<p class="item_name">RETURN VALUE</p>
+<pre>    Returns the value of the integer represented by the string.
+</pre>
+
+</div> <!-- content -->
+<div id="footer">
+<p>Generated from ./str.asm with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Mon Oct 22 2018 23:08:30
+</p>
+</div> <!-- footer -->
+</body>
+</html>

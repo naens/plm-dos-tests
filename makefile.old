@@ -29,11 +29,11 @@ clean: .SYMBOLIC
 	rm -f *.map *.lst *.obj *.err *.sym hello hello.exe dump dump.exe
 
 docs: .SYMBOLIC
-	robodoc --src . --doc ./docs --html --multidoc --sections --tell --toc --index
+	robodoc --src . --doc ./docs --html --multidoc --nodesc --sections --tell --toc --index
 	mv docs/masterindex.html docs/index.html
 
 troff: .SYMBOLIC
-	robodoc --src . --doc ./troff --troff --multidoc --sections --tell
+	robodoc --src . --doc ./troff --troff --multidoc --nodesc --sections --tell
 
 tests: sys.obj cons.obj fio.obj str.obj .SYMBOLIC
 	./buildtests

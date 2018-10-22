@@ -1,0 +1,18 @@
+.\" Source: ./str.asm
+.\" Generated with ROBODoc Version 4\.99\.43 (Mar  7 2018)
+.\" ROBODoc (c) 1994\-2015 by Frans Slothouber and many others\.
+.TH dstr2int 3 "Oct 22, 2018" str "str Reference"
+
+.SH NAME
+\fBdstr2int\fR \-\- convert a decimal string to signed integer
+
+.SH DESCRIPTION
+Converts a null terminated string, positive or negative to a 16\-bit
+signed integer\.  If the string is empty 0 is returned\.
+
+.SH PARAMETERS
+pstr \- pointer to string representing the integer that has to be
+converted\.
+
+.SH RETURN VALUE
+Returns a signed integer corresponding to the input string\.
