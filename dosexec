@@ -1,11 +1,12 @@
 #!/bin/sh
 
 command="$@"
+#echo command="$command"
 tmpfile='tmp.$$$'
-SDL_VIDEODRIVER=dummy SDL_AUDIODRIVER=dummy \
-	dosbox	-c "mount c $(pwd)" \
+SDL_VIDEODRIVER=dummy SDL_AUDIODRIVER=dummy dosbox \
+        -conf sets.cnf \
+		-c "mount c $(pwd)" \
 		-c "c:" \
-		-c "set path=%path%;c:\disk\tasm\bin" \
 		-c "$command > tmp.\$\$\$" \
 		-c "exit" > /dev/null
 

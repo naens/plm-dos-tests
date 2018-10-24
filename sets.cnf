@@ -1,0 +1,6 @@
+[autoexec]
+set path=%path%;c:\disk\fdos\bin
+set path=%path%;c:\disk\tasm\bin
+set path=%path%;c:\disk\intel\bin
+set path=%path%;c:\disk\tp
+set path=%path%;c:\disk\fdos\dn2

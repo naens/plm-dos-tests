@@ -36,4 +36,4 @@ troff: .SYMBOLIC
 	robodoc --src . --doc ./troff --troff --multidoc --nodesc --sections --tell
 
 tests: sys.obj cons.obj fio.obj str.obj .SYMBOLIC
-	./buildtests
+	./buildtst

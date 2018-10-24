@@ -3,19 +3,16 @@
 command="$@"
 if [[ -z "$command" ]]; then
     SDL_AUDIODRIVER=dummy dosbox \
+        -conf ~/.dosbox/dosbox-0.74.conf -conf sets.cnf \
 		-c "mount c $(pwd)" \
 		-c "c:" \
-		-c "set path=%path%;c:\disk\fdos\bin" \
-		-c "set path=%path%;c:\disk\tasm\bin" \
-		-c "set path=%path%;c:\disk\tp" \
-		-c "set path=%path%;c:\disk\intel\bin" \
 		-c "cls"
 else
     tmpfile='tmp.$$$'
     SDL_AUDIODRIVER=dummy dosbox \
+        -conf ~/.dosbox/dosbox-0.74.conf -conf sets.cnf \
 		-c "mount c $(pwd)" \
 		-c "c:" \
-		-c "set path=%path%;c:\disk\tasm\bin" \
 		-c "cls" \
 		-c "$command" \
 		-c "pause" \
