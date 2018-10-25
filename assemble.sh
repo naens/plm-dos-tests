@@ -8,7 +8,9 @@ function runcmd()
 		-c "mount c $(pwd)" \
 		-c "c:" \
 		-c "$cmd > tmp.\$\$\$" \
-		-c "exit" > /dev/null
+		-c "exit" > /dev/null &
+    child_pid=$!
+    echo $child_pid
 }
 
 tmpfile='tmp.$$$'
@@ -31,7 +33,13 @@ function cleanup()
 
     if [ -f "$tmpfile" ]
     then
-        cat "$tmpfile"
+        msg=$(cat "$tmpfile")
+        echo "$msg"
+        local err=$(echo "$msg" | grep -i error | grep -iv "no errors")
+        if [ -n "$err" ]
+        then
+            result=2
+        fi
         rm "$tmpfile"
     fi
 }
@@ -47,19 +55,34 @@ path2=$(echo $path | tr '/' '\\')
 start=$(date '+%Y-%m-%d %H:%M:%S')
 
 cmd="asm86 $path2"
-runcmd "$cmd"&
-child_pid=$!
+child_pid=$(runcmd "$cmd")
 
 unset lst
+result=0
 while [ -z "$lst" ]
 do
     lst=$(find "$dir" -newermt "$start" | grep -i lst)
     sleep 0.2
 done
 sleep 0.1
-kill -INT $child_pid
+kill $child_pid
 
-msg=$(tail -n 1 "$lst")
-echo "$msg"
+if [ -f "$tmpfile" ]
+then
+    if [ $(wc -c "$tmpfile") -eq 0 ]
+    then
+        msg=$(tail -n 1 "$lst")
+        echo "$msg"
+        local err=$(echo "$msg" | grep -i error | grep -iv "no errors")
+        if [ -n "$err" ]
+        then
+            result=1
+        fi
+    fi
+fi
+
+grep '\*\*\* [A-Z]' $lst
 
 cleanup
+
+exit $result
