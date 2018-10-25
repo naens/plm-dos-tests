@@ -1,17 +1,26 @@
-libs := sys cons str fio
+comma := ,
+empty :=
+space := $(empty) $(empty)
+libs := sys cons
+apps := hello dump
+libobjs := $(foreach lib,$(libs),$(lib).obj)
+commaobj := $(subst $(space),$(comma)$(space),$(libobjs))
 
 %.obj: %.asm
-	nasm -g -f obj $< -o $@ -l $(basename $@).lst
+	./assemble.sh $<
 
 %.obj: %.plm
-	./dosexec plm86 $< small optimize\(0\) debug code symbols nopaging
+	./dosexec.sh plm86 $< small optimize\(0\) debug code symbols nopaging
 
-%.exe: %.plm %.obj $(foreach lib,$(libs),$(lib).obj)
-	echo plm-file
-	wcl @wcl.lnk -zq -d2 -lr -bc -bcl=dos -fe=$@  $(filter %.obj,$^)
+%.86:	%.obj $(libobjs)
+	./dosexec.sh link86 $<, $(commaobj) to $@ bind
 
-%.exe: %.asm %.obj $(foreach lib,$(libs),$(lib).obj)
-	./dosexec tlink /v $(subst /,\\, "$(filter %.obj,$^), $@")
+%.exe:	%.86
+	./dosexec.sh udi2dos $<
+
+$(apps): %: %.exe
+	echo ./dosexec.sh $< > $@
+	chmod +x $@
 
 .PHONY: clean
 clean:
@@ -19,3 +28,5 @@ clean:
 	@rm -f $(shell find . -name '*.lst' ! -path './disk/*')
 	@rm -f $(shell find . -name '*.map' ! -path './disk/*')
 	@rm -f $(shell find . -name '*.obj' ! -path './disk/*')
+	@rm -f $(shell find . -name '*.86' ! -path './disk/*')
+	@rm -f $(apps)

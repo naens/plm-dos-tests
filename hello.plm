@@ -10,12 +10,13 @@
 hello:
 do;
 
-$include ('sys.ext')
-$include ('cons.ext')
+    prstr: procedure (pstr) external;
+        declare pstr address;
+    end prstr;
 
-declare main label public;
+    term: procedure external;
+    end term;
 
-main:
     call prstr(.('Hello, World!', 0Dh, 0Ah, 0));
     call prstr(.('Hello, World!', 0Dh, 0Ah, 0));
     call prstr(.('Hello, World!', 0Dh, 0Ah, 0));
