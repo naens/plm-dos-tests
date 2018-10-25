@@ -6,8 +6,10 @@ apps := hello dump
 libobjs := $(foreach lib,$(libs),$(lib).obj)
 commaobj := $(subst $(space),$(comma)$(space),$(libobjs))
 
+.PRECIOUS: %.obj
+
 %.obj: %.asm
-	./assemble.sh $<
+	./assemble.sh $< debug symbols
 
 %.obj: %.plm
 	./dosexec.sh plm86 $< small optimize\(0\) debug code symbols nopaging
@@ -18,7 +20,7 @@ commaobj := $(subst $(space),$(comma)$(space),$(libobjs))
 %.exe:	%.86
 	./dosexec.sh udi2dos $<
 
-$(apps): %: %.exe
+$(apps): %: %.exe $(libobjs)
 	echo ./dosexec.sh $< > $@
 	chmod +x $@
 

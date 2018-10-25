@@ -12,6 +12,7 @@
 *.exe
 *.lib
 *.inc
+*.tmp
 *.tr
 test.txt
 disk
