@@ -1,5 +1,7 @@
         name    cons
 
+$include(dos.def)
+
         cgroup  group   code
         dgroup  group   stack
 
@@ -14,11 +16,7 @@ code    segment public  'CODE'
 
         public  prstr
 
-conout          equ     02h
-dosexit         equ     4ch
-dos             equ     21h
-
-prstr           proc    near
+prstr:
         push    bp
         mov     bp, sp
         push    si
@@ -35,9 +33,7 @@ pslpe:
         pop     si
         pop     bp
         ret     2
-prstr           endp
 
 code    ends
-
 
         end
